@@ -1,0 +1,65 @@
+<div class="board">
+  <div class="board-header">
+    <p class="board-name">{{ Board.name }}</p>
+  </div>
+  <div class="board-wrapper">
+    <div class="board-columns" cdkDropListGroup>
+      <div class="board-column" *ngFor="let column of Board.columns">
+        <div class="columns column-title">
+          <div class="column is-10">{{ column.name }}</div>
+          <div class="column is-2 pl-0">
+            <button
+              class="button icon is-medium p-0 pl-2 addbutt"
+              title="New Candidate"
+              type="button"
+              pButton
+              (click)="showDialog()"
+              icon="pi pi-user-plus"
+            ></button>
+            <p-dialog
+              [(visible)]="display"
+              *ngIf="column.name == 'Pending Review'"
+            >
+              <ng-template pTemplate="header">New Candidate</ng-template>
+              <app-add-candidate></app-add-candidate>
+              <ng-template pTemplate="footer">
+                <button
+                  pButton
+                  label="Add"
+                  class="p-button-primary"
+                  type="submit"
+                  (click)="addCandidate()"
+                >
+                  <span
+                    *ngIf="addCandidateComponent.loading"
+                    class="spinner-border spinner-border-sm mr-1"
+                  ></span>
+                </button>
+                <button
+                  pButton
+                  label="Reset"
+                  class="p-button-secondary"
+                  type="reset"
+                  (click)="resetCandidate()"
+                ></button>
+              </ng-template>
+            </p-dialog>
+          </div>
+        </div>
+        <div
+          class="tasks-container"
+          cdkDropList
+          [cdkDropListData]="column.candidates"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <app-task
+            class="task"
+            cdkDrag
+            *ngFor="let candidate of column.candidates"
+            [taskModel]="candidate"
+          ></app-task>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
