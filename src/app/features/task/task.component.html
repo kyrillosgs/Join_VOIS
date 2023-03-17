@@ -1,16 +1,20 @@
 <div class="container is-full">
   <div class="columns">
-    <div class="column is-6 wrap">{{ taskModel.name }}</div>
+    <div class="column is-6 wrap">
+      <a [routerLink]="['/candidates']" [state]="{ id: candidate.id }">{{
+        candidate.name
+      }}</a>
+    </div>
     <div class="column is-6 has-text-right wrap">
-      {{ taskModel.proposed_position }}
+      {{ candidate.proposed_position }}
     </div>
   </div>
   <div class="columns">
     <div class="column is-full description wrap">
-      {{ taskModel.email }}
+      {{ candidate.email }}
     </div>
   </div>
   <div class="columns">
-    <div class="column is-full description wrap">{{ taskModel.phone }}</div>
+    <div class="column is-full description wrap">{{ candidate.phone }}</div>
   </div>
 </div>

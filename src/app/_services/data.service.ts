@@ -44,21 +44,21 @@ export class DataService {
       ]),
       new Column('Phone Screening', [
         new Candidate(
-          125,
+          120,
           'AbdElrahmanderfwre Elarnaouty',
           'cameron.williamson@abc.com',
           '0123456789',
           'ServiceNow Architect'
         ),
         new Candidate(
-          125,
+          101,
           'Cameron Williamson',
           'cameron.williamson@abc.com',
           '0123456789',
           'Sales'
         ),
         new Candidate(
-          125,
+          140,
           'Cameron Williamson',
           'cameron.williamson@abc.com',
           '0123456789',
@@ -67,14 +67,14 @@ export class DataService {
       ]),
       new Column('Technical Interview', [
         new Candidate(
-          125,
+          134,
           'Cameron Williamson',
           'cameron.williamson@abc.com',
           '0123456789',
           'Sales'
         ),
         new Candidate(
-          125,
+          149,
           'Cameron Williamson',
           'cameron.williamson@abc.com',
           '0123456789',
@@ -83,21 +83,21 @@ export class DataService {
       ]),
       new Column('Manager Interview', [
         new Candidate(
-          125,
+          188,
           'Cameron Williamson',
           'cameron.williamson@abc.com',
           '0123456789',
           'Sales'
         ),
         new Candidate(
-          125,
+          158,
           'Cameron Williamson',
           'cameron.williamson@abc.com',
           '0123456789',
           'Sales'
         ),
         new Candidate(
-          125,
+          168,
           'Cameron Williamson',
           'cameron.williamson@abc.com',
           '0123456789',
@@ -106,14 +106,14 @@ export class DataService {
       ]),
       new Column('Customer Interview', [
         new Candidate(
-          125,
+          121,
           'Cameron Williamson',
           'cameron.williamson@abc.com',
           '0123456789',
           'Sales'
         ),
         new Candidate(
-          125,
+          199,
           'Cameron Williamson',
           'cameron.williamson@abc.com',
           '0123456789',
@@ -122,7 +122,7 @@ export class DataService {
       ]),
       new Column('HR Interview', [
         new Candidate(
-          125,
+          172,
           'Cameron Williamson',
           'cameron.williamson@abc.com',
           '0123456789',
