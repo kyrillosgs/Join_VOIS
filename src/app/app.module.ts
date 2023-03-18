@@ -13,6 +13,8 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
+import { ChipModule } from 'primeng/chip';
+import { SidebarModule } from 'primeng/sidebar';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './features/home/home.component';
@@ -45,6 +47,8 @@ import { ProfileComponent } from './features/profile/profile.component';
     PdfViewerModule,
     MenuModule,
     MenubarModule,
+    ChipModule,
+    SidebarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

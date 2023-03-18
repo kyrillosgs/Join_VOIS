@@ -5,6 +5,7 @@ export class Candidate {
     public email: string,
     public phone: string,
     public proposed_position?: string,
+    public current_position?: string,
     public cv?: string,
     public image?: string,
     public state?: string,

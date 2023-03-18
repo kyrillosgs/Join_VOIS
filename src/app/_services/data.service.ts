@@ -18,14 +18,28 @@ export class DataService {
           'Cameron Williamson',
           'cameron.williamson@abc.com',
           '0123456789',
-          'Sales'
+          'ServiceNow Developer',
+          'Full-stack .NET Developer',
+          'assets/files/Kyrillos Bishai - CV.pdf',
+          '',
+          '',
+          '',
+          0,
+          0,
+          '',
+          'https://www.linkedin.com/in/kyrillos-george-bishai/'
         ),
         new Candidate(
           128,
           'Esther Howard',
           'esther.howard@abc.com',
           '0123456789',
-          'Design'
+          'ServiceNow Architect',
+          'Senior Angular Developer',
+          'assets/files/Document from Mina Magdy.pdf',
+          '',
+          '',
+          ''
         ),
         new Candidate(
           127,
