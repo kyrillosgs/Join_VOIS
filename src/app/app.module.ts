@@ -22,6 +22,10 @@ import { MenuComponent } from './core/menu/menu.component';
 import { TaskComponent } from './features/task/task.component';
 import { AddCandidateComponent } from './features/add-candidate/add-candidate.component';
 import { ProfileComponent } from './features/profile/profile.component';
+import { CandidateInfoComponent } from './features/profile/candidate-info/candidate-info.component';
+import { CandidateStateComponent } from './features/profile/candidate-state/candidate-state.component';
+import {DropdownModule} from 'primeng/dropdown';
+import {KnobModule} from 'primeng/knob';
 
 @NgModule({
   declarations: [
@@ -31,6 +35,8 @@ import { ProfileComponent } from './features/profile/profile.component';
     AddCandidateComponent,
     MenuComponent,
     ProfileComponent,
+    CandidateInfoComponent,
+    CandidateStateComponent
   ],
   imports: [
     BrowserModule,
@@ -49,6 +55,9 @@ import { ProfileComponent } from './features/profile/profile.component';
     MenubarModule,
     ChipModule,
     SidebarModule,
+    KnobModule,
+    DropdownModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,0 +1,12 @@
+.inline-block{
+    display:inline-block;
+}
+h5{
+    font-size: 20px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.text-center{
+    text-align: center;
+}

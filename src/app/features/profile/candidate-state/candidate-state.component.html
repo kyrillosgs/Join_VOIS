@@ -1,0 +1,27 @@
+<div class="container text-center">
+  <div class="row">
+    <div class="p-grid p-formgrid p-text-center col-4">
+      <div class="p-field p-col-12 p-md-4 p-text-center">
+        <h5 class="p-mt-3">Score:</h5>
+        <p-knob [ngModel]="score"  [readonly]=true valueTemplate="{value}%"></p-knob>
+      </div>
+    </div>
+
+    <div class="p-grid p-formgrid p-text-center col-4">
+      <div class="p-field p-col-12 p-md-4 p-text-center">
+        <h5 class="p-mt-3">Stage:</h5>
+        <p-dropdown [options]="allStages" [(ngModel)]="selectedStage" optionValue="code" optionLabel="name" ></p-dropdown>
+
+      </div>
+    </div>
+
+    <div class="p-grid p-formgrid p-text-center col-4">
+      <div class="p-field p-col-12 p-md-4 p-text-center">
+        
+        <button pButton pRipple type="button" label="Success" class="p-button-raised p-button-success"></button>
+        <button pButton pRipple type="button" label="Danger" class="p-button-raised p-button-danger"></button>
+
+      </div>
+    </div>
+  </div>
+</div>
