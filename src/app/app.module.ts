@@ -27,6 +27,8 @@ import { CandidateStateComponent } from './features/profile/candidate-state/cand
 import { DropdownModule } from 'primeng/dropdown';
 import { KnobModule } from 'primeng/knob';
 import { TagModule } from 'primeng/tag';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -59,8 +61,9 @@ import { TagModule } from 'primeng/tag';
     KnobModule,
     DropdownModule,
     TagModule,
+    ConfirmPopupModule,
   ],
-  providers: [],
+  providers: [ConfirmationService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

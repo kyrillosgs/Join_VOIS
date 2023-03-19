@@ -54,11 +54,17 @@ p-tag {
   border: none;
   padding: 0 !important;
 }
-.add-tag span i {
+.add-tag span i,
+p-tag span i.pi-times-circle {
   cursor: pointer;
 }
 .add-tag span i.pi-check-circle {
   right: 1.5rem;
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 1) 20%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 .add-tag span i.pi-times-circle {
   right: 0.1rem !important;
@@ -68,6 +74,11 @@ p-tag span i.pi-times-circle {
   top: 50%;
   margin-top: -0.5rem;
   right: 0.3rem !important;
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 1) 20%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 p-tag span.p-tag {
   position: relative;

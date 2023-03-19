@@ -84,8 +84,12 @@
         (mouseover)="hoveredTag = i"
         (mouseleave)="hoveredTag = -1"
       >
-        <i class="pi pi-times-circle" *ngIf="hoveredTag == i"></i
-      ></p-tag>
+        <i
+          class="pi pi-times-circle"
+          *ngIf="hoveredTag == i"
+          (click)="confirmTagRemoval($event, i)"
+        ></i>
+      </p-tag>
       <p-tag class="add-tag">
         <span #addTag>
           <i
@@ -134,3 +138,5 @@
     ></pdf-viewer>
   </ng-template>
 </p-sidebar>
+
+<p-confirmPopup></p-confirmPopup>
