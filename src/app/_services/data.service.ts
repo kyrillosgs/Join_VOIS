@@ -27,7 +27,8 @@ export class DataService {
           0,
           0,
           '',
-          'https://www.linkedin.com/in/kyrillos-george-bishai/'
+          'https://www.linkedin.com/in/kyrillos-george-bishai/',
+          ['Problem solver', 'Hard worker', 'Familiar with Agile']
         ),
         new Candidate(
           128,

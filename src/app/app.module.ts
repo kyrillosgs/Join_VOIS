@@ -24,8 +24,9 @@ import { AddCandidateComponent } from './features/add-candidate/add-candidate.co
 import { ProfileComponent } from './features/profile/profile.component';
 import { CandidateInfoComponent } from './features/profile/candidate-info/candidate-info.component';
 import { CandidateStateComponent } from './features/profile/candidate-state/candidate-state.component';
-import {DropdownModule} from 'primeng/dropdown';
-import {KnobModule} from 'primeng/knob';
+import { DropdownModule } from 'primeng/dropdown';
+import { KnobModule } from 'primeng/knob';
+import { TagModule } from 'primeng/tag';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import {KnobModule} from 'primeng/knob';
     MenuComponent,
     ProfileComponent,
     CandidateInfoComponent,
-    CandidateStateComponent
+    CandidateStateComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,8 +57,8 @@ import {KnobModule} from 'primeng/knob';
     ChipModule,
     SidebarModule,
     KnobModule,
-    DropdownModule
-    
+    DropdownModule,
+    TagModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

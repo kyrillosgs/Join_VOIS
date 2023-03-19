@@ -18,3 +18,67 @@ html {
 pdf-viewer {
   height: 100%;
 }
+.p-sidebar-header {
+  position: absolute !important;
+  z-index: 2 !important;
+  width: 100% !important;
+}
+.p-sidebar-footer {
+  display: none;
+}
+.ng2-pdf-viewer-container::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.ng2-pdf-viewer-container::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.ng2-pdf-viewer-container::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+}
+span.p-tag.p-component {
+  margin-top: 0.25rem !important;
+}
+span.p-tag-value {
+  font-size: 0.85rem !important;
+}
+span.p-tag.p-component {
+  background-color: #4a4a4a;
+}
+p-tag {
+  margin-right: 0.3rem;
+}
+.add-tag-input {
+  background-color: #4a4a4a;
+  border: none;
+  padding: 0 !important;
+}
+.add-tag span i {
+  cursor: pointer;
+}
+.add-tag span i.pi-check-circle {
+  right: 1.5rem;
+}
+.add-tag span i.pi-times-circle {
+  right: 0.1rem !important;
+}
+p-tag span i.pi-times-circle {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5rem;
+  right: 0.3rem !important;
+}
+p-tag span.p-tag {
+  position: relative;
+  display: inline-block;
+}
+.add-tag span i.pi-check-circle::before {
+  color: mediumseagreen;
+}
+.add-tag span i.pi-times-circle::before {
+  color: red;
+}
+.add-tag button {
+  height: 1rem !important;
+}

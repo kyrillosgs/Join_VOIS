@@ -1,22 +1,136 @@
-<div class="bg-secondary-subtle">
-  <div class="card w-100">
-    <img src="../../../assets/images/candidate image placeholder.jpg" class="card-img-top" alt="..." />
-    <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <p class="card-text">
-        Some quick example text to build on the card title and make up the
-        bulk of the card's content.
+<div class="card w-100">
+  <img
+    src="../../../assets/images/candidate image placeholder.jpg"
+    class="card-img-top"
+    [alt]="candidate.name + ' photo'"
+  />
+  <div class="card-body">
+    <h5 class="card-title text-center fs-4 fw-semibold">
+      {{ candidate.name }}
+    </h5>
+    <div class="card-text">
+      <p class="text-black text-center fw-lighter">
+        {{ candidate.current_position }}
       </p>
     </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">An item</li>
-      <li class="list-group-item">A second item</li>
-      <li class="list-group-item">A third item</li>
-    </ul>
-    <div class="card-body">
-      <a href="#" class="card-link">Card link</a>
-      <a href="#" class="card-link">Another link</a>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-lg-2 col-md-12 fw-semibold m-auto">
+          <i class="pi pi-envelope fs-4" pTooltip="E-mail"></i>
+        </div>
+        <div class="col-lg-10 col-md-12">
+          <a href="mailto:{{ candidate.email }}">{{ candidate.email }}</a>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-lg-2 col-sm-12 fw-semibold m-auto">
+          <i class="pi pi-briefcase fs-4" pTooltip="Applied Position"></i>
+        </div>
+        <div class="col-lg-10 col-sm-12">
+          {{ candidate.proposed_position }}
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-lg-2 col-md-12 fw-semibold m-auto">
+          <i class="pi pi-phone fs-4" pTooltip="Phone"></i>
+        </div>
+        <div class="col-lg-10 col-md-12">{{ candidate.phone }}</div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-lg-2 col-md-12 fw-semibold m-auto">
+          <i class="pi pi-linkedin fs-4" pTooltip="LinkedIn Profile"></i>
+        </div>
+        <div class="col-lg-10 col-md-12">
+          <a [href]="candidate.linkedin_profile" target="_blank">
+            {{ candidate.linkedin_profile }}
+          </a>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-lg-2 col-md-12 fw-semibold m-auto">
+          <i class="pi pi-file-pdf fs-4" pTooltip="CV"></i>
+        </div>
+        <div class="col-lg-10 col-md-12">
+          <a routerLink="." skipLocationChange (click)="display = true"
+            >Preview</a
+          >&nbsp;&nbsp;
+          <div class="vr align-baseline"></div>
+          &nbsp;&nbsp;
+          <a routerLink="." skipLocationChange>Download</a>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <div class="card-body row">
+    <div class="col-lg-2 col-md-12 fw-semibold m-auto">
+      <i class="pi pi-tags fs-4" pTooltip="Tags"></i>
+    </div>
+    <div class="col-lg-10 col-md-12">
+      <p-tag
+        *ngFor="let tag of candidate.tags; let i = index"
+        icon="pi pi-hashtag"
+        value="{{ tag }}"
+        id="{{ i }}"
+        (mouseover)="hoveredTag = i"
+        (mouseleave)="hoveredTag = -1"
+      >
+        <i class="pi pi-times-circle" *ngIf="hoveredTag == i"></i
+      ></p-tag>
+      <p-tag class="add-tag">
+        <span #addTag>
+          <i
+            class="pi pi-check-circle"
+            (click)="addTagToCandidate()"
+            *ngIf="addingTag"
+          ></i>
+          <i
+            class="pi pi-times-circle"
+            (click)="addingTag = false; newTag = ''"
+            *ngIf="addingTag"
+          ></i>
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="newTag"
+            (keyup.enter)="addTagToCandidate()"
+            (keyup.escape)="addingTag = false; newTag = ''"
+            class="add-tag-input text-light p-inputtext-sm"
+            *ngIf="addingTag"
+          />
+          <button
+            *ngIf="!addingTag"
+            class="button icon p-0 p-button-secondary p-button-text text-light p-button-sm"
+            title="Add tag"
+            type="button"
+            pButton
+            (click)="addTagClick()"
+            icon="pi pi-plus"
+          ></button>
+        </span>
+      </p-tag>
     </div>
   </div>
 </div>
-<div class="col"></div>
+
+<p-sidebar [(visible)]="display" position="right" [style]="{ width: '50em' }">
+  <ng-template pTemplate="content" class="p-0">
+    <pdf-viewer
+      [src]="pdfSrc"
+      [render-text]="true"
+      [fit-to-page]="true"
+      [original-size]="false"
+      [autoresize]="false"
+      (page-rendered)="onSidebarShow()"
+    ></pdf-viewer>
+  </ng-template>
+</p-sidebar>
