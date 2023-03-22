@@ -29,7 +29,11 @@ import { KnobModule } from 'primeng/knob';
 import { TagModule } from 'primeng/tag';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
-
+import { LoginComponent } from './core/auth/login/login.component';
+import { NgxPermissionsModule } from 'ngx-permissions';
+import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
+import { windowFactory } from './core/token/window-factory';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,6 +44,7 @@ import { ConfirmationService } from 'primeng/api';
     ProfileComponent,
     CandidateInfoComponent,
     CandidateStateComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -62,8 +67,14 @@ import { ConfirmationService } from 'primeng/api';
     DropdownModule,
     TagModule,
     ConfirmPopupModule,
+    NgxPermissionsModule.forRoot(),
+    RxReactiveFormsModule,
+    FontAwesomeModule
   ],
-  providers: [ConfirmationService],
+  providers: [
+    ConfirmationService,
+    { provide: Window, useFactory: windowFactory },
+  ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
