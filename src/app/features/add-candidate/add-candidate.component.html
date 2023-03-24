@@ -21,13 +21,13 @@
     />
     <div *ngIf="f['Name'].errors && submitted" class="invalid-feedback">
       <div *ngIf="f['Name'].errors['required']">Candidate name is required</div>
-      <div *ngIf="f['Name'].errors['pattern']">Please enter a valid name.</div>
+      <div *ngIf="f['Name'].errors['pattern']">Please enter a valid name</div>
       <div *ngIf="f['Name'].errors['minlength']">
-        Candidate name must be at least 3 characters.
+        Candidate name must be at least 3 characters
       </div>
     </div>
   </div>
-  <div class="col-12">
+  <div class="col-md-12 col-lg-6">
     <label class="form-label" for="cemail">E-mail:</label>
     <input
       type="email"
@@ -48,11 +48,11 @@
         Candidate e-mail is required
       </div>
       <div *ngIf="f['Email'].errors['pattern']">
-        Please enter a valid e-mail address.
+        Please enter a valid e-mail address
       </div>
     </div>
   </div>
-  <div class="col-12">
+  <div class="col-md-12 col-lg-6">
     <label class="form-label" for="cphone">Phone NO:</label>
     <input
       type="tel"
@@ -72,77 +72,248 @@
         Candidate phone number is required
       </div>
       <div *ngIf="f['Phone'].errors['pattern']">
-        Please enter a valid phone number.
+        Please enter a valid phone number
       </div>
       <div *ngIf="f['Phone'].errors['minlength']">
-        Candidate phone number must be at least 4 characters.
+        Candidate phone number must be at least 4 characters
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 col-lg-6">
+    <label class="form-label" for="cproposedposition">Proposed Position:</label>
+    <input
+      type="text"
+      id="cproposedposition"
+      pInputText
+      class="form-control"
+      formControlName="Proposed Position"
+      [ngClass]="{
+        'is-invalid': f['Proposed Position'].errors && submitted,
+        'is-valid': !f['Proposed Position'].errors && submitted
+      }"
+      value=""
+      placeholder="Candidate Proposed Position"
+    />
+    <div
+      *ngIf="f['Proposed Position'].errors && submitted"
+      class="invalid-feedback"
+    >
+      <div *ngIf="f['Proposed Position'].errors['required']">
+        Candidate proposed position is required
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 col-lg-6">
+    <label class="form-label" for="crecruiter">Recruiter:</label>
+    <input
+      type="text"
+      id="crecruiter"
+      pInputText
+      class="form-control"
+      formControlName="Recruiter"
+      [ngClass]="{
+        'is-invalid': f['Recruiter'].errors && submitted,
+        'is-valid': !f['Recruiter'].errors && submitted
+      }"
+      value=""
+      placeholder="Candidate Recruiter Name"
+    />
+    <div *ngIf="f['Recruiter'].errors && submitted" class="invalid-feedback">
+      <div *ngIf="f['Recruiter'].errors['required']">
+        Candidate recruiter is required
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 col-lg-6">
+    <label class="form-label" for="ccurrentemployer">Current Employer:</label>
+    <input
+      type="text"
+      id="ccurrentemployer"
+      pInputText
+      class="form-control"
+      formControlName="Current Employer"
+      [ngClass]="{
+        'is-invalid': f['Current Employer'].errors && submitted,
+        'is-valid': !f['Current Employer'].errors && submitted
+      }"
+      value=""
+      placeholder="Candidate Current Employer"
+    />
+    <div
+      *ngIf="f['Current Employer'].errors && submitted"
+      class="invalid-feedback"
+    >
+      <div *ngIf="f['Current Employer'].errors['required']">
+        Candidate current employer is required
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 col-lg-6">
+    <label class="form-label" for="ccurrentposition">Current Position:</label>
+    <input
+      type="text"
+      id="ccurrentposition"
+      pInputText
+      class="form-control"
+      formControlName="Current Position"
+      [ngClass]="{
+        'is-invalid': f['Current Position'].errors && submitted,
+        'is-valid': !f['Current Position'].errors && submitted
+      }"
+      value=""
+      placeholder="Candidate Current Position"
+    />
+    <div
+      *ngIf="f['Current Position'].errors && submitted"
+      class="invalid-feedback"
+    >
+      <div *ngIf="f['Current Position'].errors['required']">
+        Candidate current position is required
       </div>
     </div>
   </div>
   <div class="col-12">
-    <div class="row">
-      <div class="col-6">
-        <label class="form-label" for="ccv">CV:</label>
-        <p-fileUpload
-          id="ccv"
-          accept="application/pdf"
-          [auto]="false"
-          [showCancelButton]="false"
-          [showUploadButton]="false"
-          [ngClass]="{
-            'is-invalid': pdfSubmitted && (formatError || sizeError)
-          }"
-          (onSelect)="pdfChange($event)"
-        >
-          <ng-template let-file pTemplate="file">
-            <div class="p-fileupload-row" *ngIf="pdfToUpload">
-              <div>
-                <pdf-viewer
-                  [src]="pdfToUpload"
-                  [render-text]="false"
-                  [show-all]="false"
-                  [original-size]="false"
-                  [autoresize]="true"
-                  [page]="1"
-                  [fit-to-page]="true"
-                  (error)="pdfError('formatError')"
-                  style="height: 9rem"
-                ></pdf-viewer>
-              </div>
-              <div class="p-fileupload-filename">
-                {{ pdfName }}
-              </div>
-              <div>{{ pdfSize }} MB</div>
-              <div>
-                <button
-                  type="button"
-                  pButton
-                  class="p-element p-button p-component p-button-icon-only"
-                  icon="pi pi-times"
-                  (click)="clearPDF()"
-                ></button>
-              </div>
-            </div>
-          </ng-template>
-        </p-fileUpload>
-        <div
-          *ngIf="pdfSubmitted && (formatError || sizeError)"
-          class="invalid-feedback"
-        >
-          <div *ngIf="sizeError">File size cannot exceed 10 MB.</div>
-          <div *ngIf="formatError">Unsupported file type.</div>
+    <label class="form-label" for="clinkedinprofile">LinkedIn Profile:</label>
+    <div class="input-group">
+      <span class="input-group-text" id="clinkedinprofile-addon">{{
+        linkedinPrefix
+      }}</span>
+      <input
+        type="text"
+        id="clinkedinprofile"
+        pInputText
+        class="form-control"
+        formControlName="Linkedin Profile"
+        [ngClass]="{
+          'is-invalid': f['Linkedin Profile'].errors && submitted,
+          'is-valid': !f['Linkedin Profile'].errors && submitted
+        }"
+        value=""
+        placeholder="profile"
+      />
+      <div
+        *ngIf="f['Linkedin Profile'].errors && submitted"
+        class="invalid-feedback"
+      >
+        <div *ngIf="f['Linkedin Profile'].errors['required']">
+          Candidate linkedin profile is required
         </div>
       </div>
-      <div class="col-6">
-        <label class="form-label" for="cimage">Image:</label>
-        <p-fileUpload
-          accept="image/*"
-          id="cimage"
-          [auto]="false"
-          [showCancelButton]="false"
-          [showUploadButton]="false"
-        ></p-fileUpload>
+    </div>
+  </div>
+  <div class="col-12">
+    <label class="form-label" for="cstate">State:</label>
+    <p-dropdown
+      formControlName="State"
+      [options]="states"
+      optionLabel="optionLabel"
+      optionValue="optionValue"
+      id="cstate"
+      [ngClass]="{
+        'is-invalid': f['State'].errors && submitted,
+        'is-valid': !f['State'].errors && submitted
+      }"
+      styleClass="form-control"
+      placeholder="Candidate State"
+    ></p-dropdown>
+    <div *ngIf="f['State'].errors && submitted" class="invalid-feedback">
+      <div *ngIf="f['State'].errors['required']">
+        You must specify the state of the candidate
       </div>
     </div>
+  </div>
+  <div class="col-12">
+    <label class="form-label" for="ccomments">Comments:</label>
+    <textarea
+      rows="5"
+      cols="30"
+      pInputTextarea
+      [autoResize]="true"
+      id="ccomments"
+      formControlName="Comments"
+      [ngClass]="{
+        'is-invalid': f['Comments'].errors && submitted,
+        'is-valid': !f['Comments'].errors && submitted
+      }"
+      value=""
+      placeholder="Comments on the candidate..."
+      class="form-control"
+    ></textarea>
+    <div *ngIf="f['Comments'].errors && submitted" class="invalid-feedback">
+      <div *ngIf="f['Comments'].errors['required']">
+        You must type any comments on the candidate
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <label class="form-label" for="ccv">CV:</label>
+    <p-fileUpload
+      id="ccv"
+      accept="application/pdf"
+      class="form-control"
+      [auto]="false"
+      [showCancelButton]="false"
+      [showUploadButton]="false"
+      [ngClass]="{
+        'is-invalid':
+          (pdfSubmitted && (formatError || sizeError)) ||
+          (submitted && !pdfToUpload),
+        'is-valid': submitted && pdfToUpload
+      }"
+      (onSelect)="pdfChange($event)"
+    >
+      <ng-template let-file pTemplate="file">
+        <div class="p-fileupload-row" *ngIf="pdfToUpload">
+          <div>
+            <pdf-viewer
+              [src]="pdfToUpload"
+              [render-text]="false"
+              [show-all]="false"
+              [original-size]="false"
+              [autoresize]="true"
+              [page]="1"
+              [fit-to-page]="true"
+              (error)="pdfError('formatError')"
+              style="height: 9rem"
+            ></pdf-viewer>
+          </div>
+          <div class="p-fileupload-filename">
+            {{ pdfName }}
+          </div>
+          <div>{{ pdfSize }} MB</div>
+          <div>
+            <button
+              type="button"
+              pButton
+              class="p-element p-button p-component p-button-icon-only"
+              icon="pi pi-times"
+              (click)="clearPDF()"
+            ></button>
+          </div>
+        </div>
+      </ng-template>
+    </p-fileUpload>
+    <div
+      *ngIf="pdfSubmitted && (formatError || sizeError)"
+      class="invalid-feedback"
+    >
+      <div *ngIf="sizeError">File size cannot exceed 10 MB</div>
+      <div *ngIf="formatError">Unsupported file type</div>
+    </div>
+    <div *ngIf="f['CV'].errors && submitted" class="invalid-feedback">
+      <div *ngIf="f['CV'].errors['required']">Candidate CV is required</div>
+    </div>
+  </div>
+  <div class="col-6">
+    <label class="form-label" for="cimage">Image:</label>
+    <p-fileUpload
+      accept="image/*"
+      class="form-control"
+      id="cimage"
+      [auto]="false"
+      [showCancelButton]="false"
+      [showUploadButton]="false"
+      (onSelect)="imgChange($event)"
+    ></p-fileUpload>
   </div>
 </form>

@@ -26,6 +26,7 @@ import { CandidateInfoComponent } from './features/profile/candidate-info/candid
 import { CandidateStateComponent } from './features/profile/candidate-state/candidate-state.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { KnobModule } from 'primeng/knob';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TagModule } from 'primeng/tag';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
@@ -44,7 +45,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ProfileComponent,
     CandidateInfoComponent,
     CandidateStateComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,7 +70,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ConfirmPopupModule,
     NgxPermissionsModule.forRoot(),
     RxReactiveFormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    InputTextareaModule,
   ],
   providers: [
     ConfirmationService,
@@ -77,4 +79,4 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

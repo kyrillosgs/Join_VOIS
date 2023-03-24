@@ -30,7 +30,6 @@ export class CandidateInfoComponent implements OnInit {
     route.params.subscribe((params) => {
       this.candidateId = params['id'];
     });
-    this.getCandidate();
   }
 
   confirmTagRemoval(event: Event, index: number) {
@@ -48,12 +47,9 @@ export class CandidateInfoComponent implements OnInit {
   }
 
   getCandidate() {
-    for (let column of this.dataService.getData().columns) {
-      this.candidate = column.candidates.find(
-        (candidate) => candidate.id == this.candidateId
-      ) as Candidate;
-      if (this.candidate) break;
-    }
+    this.candidate = this.dataService.allCandidates.find(
+      (c) => c.id == this.candidateId
+    ) as Candidate;
   }
 
   onSidebarShow() {
@@ -87,18 +83,12 @@ export class CandidateInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.httpClient
-      .get(this.candidate.cv as string, {
-        responseType: 'arraybuffer',
-      })
-      .subscribe(
-        async (data) => {
-          this.pdfSrc = await data;
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    this.getCandidate();
+    this.dataService
+      .getAttachment(this.candidate.cv as string)
+      .subscribe((data) => {
+        this.pdfSrc = data;
+      });
   }
 }
 

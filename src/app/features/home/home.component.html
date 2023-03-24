@@ -18,6 +18,7 @@
             ></button>
             <p-dialog
               [(visible)]="display"
+              styleClass="w-75"
               *ngIf="column.name == 'Pending Review'"
             >
               <ng-template pTemplate="header">New Candidate</ng-template>
@@ -42,6 +43,12 @@
                   type="reset"
                   (click)="resetCandidate()"
                 ></button>
+                <div
+                  *ngIf="addCandidateComponent.error"
+                  class="alert alert-danger mt-3 mb-0 text-start"
+                >
+                  {{ addCandidateComponent.error }}
+                </div>
               </ng-template>
             </p-dialog>
           </div>
