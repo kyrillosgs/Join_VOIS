@@ -54,13 +54,7 @@ export class DataService {
 
   public getAllCandidates() {
     return this.http.get<{ data: Candidate[] }>(
-      environment.apiURL + 'api/candidates',
-      {
-        headers: {
-          authorization:
-            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2hpcmluZy10b29sLmFobWVkc2FsZWgubmV0L2FwaS9sb2dpbiIsImlhdCI6MTY3OTY2NDc3MiwiZXhwIjoxNjc5NjY4MzcyLCJuYmYiOjE2Nzk2NjQ3NzIsImp0aSI6Img0MTVRc2YzbUd0N2w4REkiLCJzdWIiOiIxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.OVvi3IZD0-_gdNUQSPtaWiv_EE-nElswPEdPOwr3oMw',
-        },
-      }
+      environment.apiURL + 'api/candidates'
     );
   }
 

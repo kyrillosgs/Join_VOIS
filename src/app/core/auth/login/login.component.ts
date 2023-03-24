@@ -91,15 +91,16 @@ export class LoginComponent implements OnInit, OnDestroy {
       /** show loding spinner */
       //this.LoginHttpState = true;
       this.accountService.login(formData$).subscribe(
-        (_: AppBaseResponse<AuthenticationResponse>) => {
-          if (_.succeeded) {
-            this.localStorageService?.setSessionStorage(LocalStorageKeys.APP_TOKEN, _.content?.jwToken);
+        (_:any /*AppBaseResponse<AuthenticationResponse>*/) => {
+          if (_.message ==  "Login successful") {
+            this.localStorageService?.setSessionStorage(LocalStorageKeys.APP_TOKEN, _.token);
             //this.localStorageService?.setSessionStorage(LocalStorageKeys.APP_REFRESH_TOKEN, _.content?.refreshToken);
             this.localStorageService?.setSessionStorage(LocalStorageKeys.APP_LOGGED_IN, { isLoggedIn: true });
             this.userTokenData = this.authService.getTokenDataAfterDecode();
 
             this.authService.setLoginState(true);
-            this.permissionService.loadPermissions(this.authService.getUserRoles());
+            //this.permissionService.loadPermissions(this.authService.getUserRoles());
+            this.permissionService.loadPermissions([AppUserRoles.ADMIN]);
             this.redirectUsersBasedOnRole(this.userTokenData);
 
           } else {
@@ -117,10 +118,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   /** permision navigation method */
   redirectUsersBasedOnRole = (rolesPermission: AppJwtData): void => {
     const rolesArray = rolesPermission?.roles?.split(',');
-    if (rolesArray?.includes(AppUserRoles.ADMIN)) {
-      this.ngZone.run(() => this.navigateTo('/home'));
-    } 
-   
+    // if (rolesArray?.includes(AppUserRoles.ADMIN)) {
+    //   this.ngZone.run(() => this.navigateTo('/home'));
+    // } 
+    this.ngZone.run(() => this.navigateTo('/home'));
   }
 
 

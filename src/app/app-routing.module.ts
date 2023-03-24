@@ -16,16 +16,18 @@ const routes: Routes = [
     path: 'home',
     pathMatch: 'full',
     component: HomeComponent,
+    canActivate: [AuthGuard],
     data: { name: 'home' },
   },
   {
     path: 'candidates',
-    canActivate: [RedirectGuard],
+    canActivate: [AuthGuard,RedirectGuard],
     component: ProfileComponent,
   },
   {
     path: 'candidates/:id',
     component: ProfileComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'login',
