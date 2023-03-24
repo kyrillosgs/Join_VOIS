@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { ChipModule } from 'primeng/chip';
 import { SidebarModule } from 'primeng/sidebar';
+import { ToastModule } from 'primeng/toast';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './features/home/home.component';
@@ -35,6 +36,8 @@ import { NgxPermissionsModule } from 'ngx-permissions';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { windowFactory } from './core/token/window-factory';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { HeadersService } from './interceptors/Headers.service';
+import { ErrorhandlerService } from './interceptors/global-error-handler/errorhandler.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -72,10 +75,21 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     RxReactiveFormsModule,
     FontAwesomeModule,
     InputTextareaModule,
+    ToastModule
   ],
   providers: [
     ConfirmationService,
     { provide: Window, useFactory: windowFactory },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HeadersService,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorhandlerService,
+      multi: true,
+    }
   ],
   bootstrap: [AppComponent],
 })
