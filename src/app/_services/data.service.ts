@@ -58,7 +58,7 @@ export class DataService {
       {
         headers: {
           authorization:
-            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2hpcmluZy10b29sLmFobWVkc2FsZWgubmV0L2FwaS9sb2dpbiIsImlhdCI6MTY3OTY2NDc3MiwiZXhwIjoxNjc5NjY4MzcyLCJuYmYiOjE2Nzk2NjQ3NzIsImp0aSI6Img0MTVRc2YzbUd0N2w4REkiLCJzdWIiOiIxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.OVvi3IZD0-_gdNUQSPtaWiv_EE-nElswPEdPOwr3oMw',
+            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2hpcmluZy10b29sLmFobWVkc2FsZWgubmV0L2FwaS9sb2dpbiIsImlhdCI6MTY3OTY3MTA4NiwiZXhwIjoxNjc5Njc0Njg2LCJuYmYiOjE2Nzk2NzEwODYsImp0aSI6IlFTNHlNV3BKcllrcFB1TzIiLCJzdWIiOiIxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.VuOlNGehkyq1Dc_sA5xRNuR3iykgzmD1ENWjXRa93dE',
         },
       }
     );
@@ -68,7 +68,10 @@ export class DataService {
     return this.http.get<any>(environment.apiURL + url, {
       headers: new HttpHeaders({
         authorization:
-          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2hpcmluZy10b29sLmFobWVkc2FsZWgubmV0L2FwaS9sb2dpbiIsImlhdCI6MTY3OTY2NDc3MiwiZXhwIjoxNjc5NjY4MzcyLCJuYmYiOjE2Nzk2NjQ3NzIsImp0aSI6Img0MTVRc2YzbUd0N2w4REkiLCJzdWIiOiIxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.OVvi3IZD0-_gdNUQSPtaWiv_EE-nElswPEdPOwr3oMw',
+          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2hpcmluZy10b29sLmFobWVkc2FsZWgubmV0L2FwaS9sb2dpbiIsImlhdCI6MTY3OTY3MTA4NiwiZXhwIjoxNjc5Njc0Njg2LCJuYmYiOjE2Nzk2NzEwODYsImp0aSI6IlFTNHlNV3BKcllrcFB1TzIiLCJzdWIiOiIxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.VuOlNGehkyq1Dc_sA5xRNuR3iykgzmD1ENWjXRa93dE',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+        'Access-Control-Allow-Methods':
+          'GET, POST, PATCH, PUT, DELETE, OPTIONS',
       }),
     });
   }

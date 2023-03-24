@@ -85,16 +85,17 @@ export class CandidateInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCandidate();
-    this.dataService
-      .getAttachment(this.candidate.cv as string)
-      .subscribe((data) => {
-        this.pdfSrc = data;
-      });
-    this.dataService
-      .getAttachment(this.candidate.img as string)
-      .subscribe((data) => {
-        this.imgSrc = data;
-      });
+    // this.dataService
+    //   .getAttachment(this.candidate.cv as string)
+    //   .subscribe((data) => {
+    //     this.pdfSrc = data;
+    //   });
+    // this.dataService
+    //   .getAttachment(this.candidate.img as string)
+    //   .subscribe((data) => {
+    //     this.imgSrc = data;
+    //   });
+    this.pdfSrc = 'https://hiring-tool.ahmedsaleh.net/' + this.candidate.cv;
   }
 }
 
