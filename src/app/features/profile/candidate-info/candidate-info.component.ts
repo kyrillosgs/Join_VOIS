@@ -17,6 +17,7 @@ export class CandidateInfoComponent implements OnInit {
   protected candidate!: Candidate;
   display: boolean = false;
   pdfSrc: any = '';
+  imgSrc: any = '';
   newTag: any = '';
   addingTag: boolean = false;
   hoveredTag: number = -1;
@@ -88,6 +89,11 @@ export class CandidateInfoComponent implements OnInit {
       .getAttachment(this.candidate.cv as string)
       .subscribe((data) => {
         this.pdfSrc = data;
+      });
+    this.dataService
+      .getAttachment(this.candidate.img as string)
+      .subscribe((data) => {
+        this.imgSrc = data;
       });
   }
 }

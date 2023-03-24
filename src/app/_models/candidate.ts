@@ -7,7 +7,7 @@ export class Candidate {
     public proposed_position?: string,
     public current_position?: string,
     public cv?: string,
-    public image?: string,
+    public img?: string,
     public state?: string,
     public comment?: string,
     public recruiter?: number,
