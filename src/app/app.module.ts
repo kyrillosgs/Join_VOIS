@@ -32,6 +32,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TagModule } from 'primeng/tag';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 import { LoginComponent } from './core/auth/login/login.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
@@ -39,6 +41,7 @@ import { windowFactory } from './core/token/window-factory';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HeadersService } from './interceptors/Headers.service';
 import { ErrorhandlerService } from './interceptors/global-error-handler/errorhandler.service';
+import {MessageService} from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -79,21 +82,23 @@ import { ErrorhandlerService } from './interceptors/global-error-handler/errorha
     InputTextareaModule,
     ToastModule,
     MultiSelectModule,
+    ConfirmDialogModule
   ],
   providers: [
     ConfirmationService,
+    MessageService,
     { provide: Window, useFactory: windowFactory },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HeadersService,
       multi: true,
-    } /*,
+    } ,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorhandlerService,
       multi: true,
-    }*/,
+    },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

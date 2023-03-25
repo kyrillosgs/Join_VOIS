@@ -1,1 +1,6 @@
+<ng-container *ngIf="!isAuth">
+    <app-menu ></app-menu>
+</ng-container>
 <router-outlet></router-outlet>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-toast></p-toast>

@@ -1,0 +1,13 @@
+.logo-app {
+    max-height: 60px !important;
+}
+@media (max-width: 567.98px) {
+    .logo-app {
+        max-height: 25px;
+    }
+  }
+  @media (max-width: 320px) {
+    .logo-app {
+        max-height: 35px;
+    }
+  }
