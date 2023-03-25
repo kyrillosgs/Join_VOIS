@@ -16,6 +16,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { ChipModule } from 'primeng/chip';
 import { SidebarModule } from 'primeng/sidebar';
 import { ToastModule } from 'primeng/toast';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './features/home/home.component';
@@ -38,6 +39,7 @@ import { windowFactory } from './core/token/window-factory';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HeadersService } from './interceptors/Headers.service';
 import { ErrorhandlerService } from './interceptors/global-error-handler/errorhandler.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -75,7 +77,8 @@ import { ErrorhandlerService } from './interceptors/global-error-handler/errorha
     RxReactiveFormsModule,
     FontAwesomeModule,
     InputTextareaModule,
-    ToastModule
+    ToastModule,
+    MultiSelectModule,
   ],
   providers: [
     ConfirmationService,
@@ -84,12 +87,12 @@ import { ErrorhandlerService } from './interceptors/global-error-handler/errorha
       provide: HTTP_INTERCEPTORS,
       useClass: HeadersService,
       multi: true,
-    },
+    } /*,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorhandlerService,
       multi: true,
-    }
+    }*/,
   ],
   bootstrap: [AppComponent],
 })

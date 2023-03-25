@@ -52,9 +52,9 @@ export class DataService {
     []
   );
 
-  public getAllCandidates() {
+  public getAllCandidates(id: number) {
     return this.http.get<{ data: Candidate[] }>(
-      environment.apiURL + 'api/candidates'
+      environment.apiURL + 'api/candidates/get_candidates_by_team/' + id
     );
   }
 
@@ -64,16 +64,11 @@ export class DataService {
     );
   }
 
-  public getAttachment(url: string) {
-    return this.http.get<any>(environment.apiURL + url, {
-      headers: new HttpHeaders({
-        authorization:
-          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2hpcmluZy10b29sLmFobWVkc2FsZWgubmV0L2FwaS9sb2dpbiIsImlhdCI6MTY3OTY3MTA4NiwiZXhwIjoxNjc5Njc0Njg2LCJuYmYiOjE2Nzk2NzEwODYsImp0aSI6IlFTNHlNV3BKcllrcFB1TzIiLCJzdWIiOiIxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.VuOlNGehkyq1Dc_sA5xRNuR3iykgzmD1ENWjXRa93dE',
-        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
-        'Access-Control-Allow-Methods':
-          'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-      }),
-    });
+  public getCV(id: number) {
+    return this.http.get<any>(
+      environment.apiURL + 'api/candidates/candidate_cv/' + id,
+      { responseType: 'arraybuffer' as any }
+    );
   }
 
   public getData(): Board {
@@ -84,6 +79,27 @@ export class DataService {
     return this.http.post<any>(
       environment.apiURL + 'api/candidates/create',
       candidate
+    );
+  }
+
+  editCandidate(id: number, update: object) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/candidates/edit/' + id,
+      update
+    );
+  }
+
+  addTagToCandidate(candidate_id: number, tag_name: string) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/candidates/add_tag_to_candidate',
+      { candidate_id, tag_name }
+    );
+  }
+
+  removeTagFromCandidate(candidate_id: number, tag_name: string) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/candidates/delete_tag_to_candidate',
+      { candidate_id, tag_name }
     );
   }
 }

@@ -18,28 +18,31 @@ export class CandidateInfoComponent implements OnInit {
   display: boolean = false;
   pdfSrc: any = '';
   imgSrc: any = '';
+  downloadLink: any;
   newTag: any = '';
   addingTag: boolean = false;
   hoveredTag: number = -1;
 
   ngOnInit(): void {
-    if (!this.candidate) {
-      this.dataService.getCandidate(this.candidateId).subscribe(
-        (data) => {
-          this.candidate = data.data;
-          this.pdfSrc =
-            'https://hiring-tool.ahmedsaleh.net/' + this.candidate.cv;
-          this.imgSrc =
-            'https://hiring-tool.ahmedsaleh.net/' + this.candidate.img;
-        },
-        (error) => {}
-      );
-    }
-    // this.dataService
-    //   .getAttachment(this.candidate.cv as string)
-    //   .subscribe((data) => {
-    //     this.pdfSrc = data;
-    //   });
+    this.downloadLink = document.createElement('a');
+    this.dataService.getCandidate(this.candidateId).subscribe(
+      (data) => {
+        this.candidate = data.data;
+        this.imgSrc =
+          'https://hiring-tool.ahmedsaleh.net/' + this.candidate.img;
+        this.downloadLink.setAttribute('download', this.candidate.name);
+      },
+      (error) => {}
+    );
+    this.dataService.getCV(this.candidateId).subscribe(
+      (data) => {
+        this.pdfSrc = data;
+        this.downloadLink.href = window.URL.createObjectURL(
+          new Blob([this.pdfSrc], { type: 'application/pdf' })
+        );
+      },
+      (error) => {}
+    );
   }
 
   constructor(
@@ -53,13 +56,25 @@ export class CandidateInfoComponent implements OnInit {
     });
   }
 
+  downloadCV() {
+    document.body.appendChild(this.downloadLink);
+    this.downloadLink.click();
+  }
+
   confirmTagRemoval(event: Event, index: number) {
     this.confirmationService.confirm({
       target: event.target as any,
       message: 'Remove tag "' + (this.candidate.tags as any)[index] + '"?',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.candidate.tags?.splice(index, 1);
+        this.dataService
+          .removeTagFromCandidate(
+            this.candidateId,
+            (this.candidate.tags as any)[index]
+          )
+          .subscribe((data) => {
+            this.candidate.tags?.splice(index, 1);
+          });
       },
       reject: () => {
         //reject action
@@ -78,6 +93,7 @@ export class CandidateInfoComponent implements OnInit {
   }
 
   addTagToCandidate() {
+    let tag = this.newTag.removeExtraSpaces();
     if (
       this.newTag.trim() &&
       !this.candidate.tags?.find(
@@ -86,7 +102,11 @@ export class CandidateInfoComponent implements OnInit {
           (this.newTag as any).removeExtraSpaces().toLowerCase()
       )
     )
-      this.candidate.tags?.push(this.newTag.removeExtraSpaces());
+      this.dataService
+        .addTagToCandidate(this.candidateId, tag)
+        .subscribe((data) => {
+          this.candidate.tags?.push(tag);
+        });
     this.addingTag = false;
     this.newTag = '';
   }

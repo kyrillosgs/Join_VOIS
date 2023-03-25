@@ -11,6 +11,8 @@ import { AddCandidateComponent } from '../add-candidate/add-candidate.component'
 import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { State } from 'src/app/_models/enums/state';
+import { Team } from 'src/app/_models/team';
 
 @Component({
   selector: 'app-home',
@@ -22,10 +24,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   addCandidateComponent!: AddCandidateComponent;
   public destroyed = new Subject<any>();
   loading: boolean = true;
+  teams: Team[] = [new Team(1, 'ServiceNow'), new Team(2, 'DevOps')];
+  selectedTeams: Team[] = [];
 
   public addCandidate() {
     this.addCandidateComponent.submit = true;
     this.addCandidateComponent.add();
+  }
+
+  changeTeams(e: any) {
+    if (this.selectedTeams.find((t) => t.id == e.itemValue.id))
+      this.retrieveTeamCandidates(e.itemValue.id);
+    else this.removeTeamCandidates(e.itemValue.id);
   }
 
   public resetCandidate() {
@@ -43,12 +53,27 @@ export class HomeComponent implements OnInit, OnDestroy {
   showDialog() {
     this.display = true;
   }
-  ngOnInit() {
-    this._dataService.getAllCandidates().subscribe(async (data) => {
-      this._dataService.allCandidates = await data.data;
+
+  retrieveTeamCandidates(id: number) {
+    this._dataService.getAllCandidates(id).subscribe(async (data) => {
+      this._dataService.allCandidates.push(...(await data.data));
       this._dataService.drawBoard();
       this.loading = false;
     });
+  }
+
+  async removeTeamCandidates(id: number) {
+    let candidates = this._dataService.allCandidates;
+    for (let c in candidates) {
+      if (candidates[c].team_id == id) {
+        this._dataService.allCandidates.splice(Number(c), 1);
+        this._dataService.drawBoard();
+        // console.log(candidates);
+      }
+    }
+  }
+
+  ngOnInit() {
     this.router.events
       .pipe(
         filter((event: any) => event instanceof NavigationEnd),
@@ -63,7 +88,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.destroyed.complete();
   }
 
-  drop(event: CdkDragDrop<Candidate[]>) {
+  drop(event: CdkDragDrop<Candidate[]>, columnName: any) {
     if (event.previousContainer === event.container) {
       moveItemInArray(
         event.container.data,
@@ -77,6 +102,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         event.previousIndex,
         event.currentIndex
       );
+      let newState =
+        Object.keys(State)[Object.values(State).indexOf(columnName)];
+      let candidate = event.container.data.find((c) => c.state != newState);
+      this._dataService
+        .editCandidate(candidate?.id as number, { state: newState })
+        .subscribe((data) => {});
     }
   }
 }

@@ -153,6 +153,7 @@ export class AddCandidateComponent implements OnInit {
         if (data.success) {
           this.error = '';
           this.loading = false;
+          cand.id = data.data.id;
           this.dataService.allCandidates.push(cand);
           this.dataService.drawBoard();
           this.resetAddCandidateForm();
