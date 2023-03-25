@@ -1,7 +1,10 @@
-<div class="card w-100">
+<div class="card w-100" *ngIf="candidate">
   <img
-    src="../../../assets/images/candidate image placeholder.jpg"
+    src="{{ imgSrc }}"
     class="card-img-top"
+    (error)="
+      imgSrc = '../../../../assets/images/candidate image placeholder.jpg'
+    "
     [alt]="candidate.name + ' photo'"
   />
   <div class="card-body">
@@ -66,7 +69,9 @@
           >&nbsp;&nbsp;
           <div class="vr align-baseline"></div>
           &nbsp;&nbsp;
-          <a routerLink="." skipLocationChange>Download</a>
+          <a routerLink="." skipLocationChange (click)="downloadCV()"
+            >Download</a
+          >
         </div>
       </div>
     </li>

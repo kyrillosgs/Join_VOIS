@@ -2,153 +2,76 @@ import { Injectable } from '@angular/core';
 import { Board } from '../_models/board';
 import { Column } from '../_models/column';
 import { Candidate } from '../_models/candidate';
+import { environment } from '../../environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { State } from '../_models/enums/state';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
-  constructor() { }
+  public allCandidates: Candidate[] = [];
+  drawBoard(): void {
+    this.allCandidates.sort((a: Candidate, b: Candidate) => {
+      if ((a.state as any) > (b.state as any)) return 1;
+      if ((a.state as any) < (b.state as any)) return -1;
+      return 0;
+    });
+    this._kanbanModal.columns = Array.from([
+      new Column(
+        State.pending_review,
+        this.allCandidates.filter((c) => c.state == 'pending_review')
+      ),
+      new Column(
+        State.phone_screening,
+        this.allCandidates.filter((c) => c.state == 'phone_screening')
+      ),
+      new Column(
+        State.technical_interview,
+        this.allCandidates.filter((c) => c.state == 'technical_interview')
+      ),
+      new Column(
+        State.manager_interview,
+        this.allCandidates.filter((c) => c.state == 'manager_interview')
+      ),
+      new Column(
+        State.customer_interview,
+        this.allCandidates.filter((c) => c.state == 'customer_interview')
+      ),
+      new Column(
+        State.hr_interview,
+        this.allCandidates.filter((c) => c.state == 'hr_interview')
+      ),
+    ]);
+  }
+
+  constructor(private http: HttpClient) { }
 
   private stages: string[] = ["Phone screening", "Technical Interview", "Manager Interview", "Customer Interview" ];
 
   private _kanbanModal: Board = new Board(
     'ServiceNow Team - DevOps & Cloud CoE',
-    [
-      new Column('Pending Review', [
-        new Candidate(
-          125,
-          'Cameron Williamson',
-          'cameron.williamson@abc.com',
-          '0123456789',
-          'ServiceNow Developer',
-          'Full-stack .NET Developer',
-          'assets/files/Kyrillos Bishai - CV.pdf',
-          '',
-          'Technical Interview',
-          '',
-          0,
-          0,
-          '',
-          'https://www.linkedin.com/in/kyrillos-george-bishai/',
-          ['Problem solver', 'Hard worker', 'Familiar with Agile'],
-          40
-        ),
-        new Candidate(
-          128,
-          'Esther Howard',
-          'esther.howard@abc.com',
-          '0123456789',
-          'ServiceNow Architect',
-          'Senior Angular Developer',
-          'assets/files/Document from Mina Magdy.pdf',
-          '',
-          '',
-          ''
-        ),
-        new Candidate(
-          127,
-          'Ralph Edwards',
-          'ralph.edwards@abc.com',
-          '0123456789',
-          'Engineer'
-        ),
-        new Candidate(
-          130,
-          'Jamie Lewis',
-          'jamie.lewis123312314dokof@dwkdok.com',
-          '012379874932',
-          'Servicenow Developer'
-        ),
-      ]),
-      new Column('Phone Screening', [
-        new Candidate(
-          120,
-          'AbdElrahmanderfwre Elarnaouty',
-          'cameron.williamson@abc.com',
-          '0123456789',
-          'ServiceNow Architect'
-        ),
-        new Candidate(
-          101,
-          'Cameron Williamson',
-          'cameron.williamson@abc.com',
-          '0123456789',
-          'Sales'
-        ),
-        new Candidate(
-          140,
-          'Cameron Williamson',
-          'cameron.williamson@abc.com',
-          '0123456789',
-          'Sales'
-        ),
-      ]),
-      new Column('Technical Interview', [
-        new Candidate(
-          134,
-          'Cameron Williamson',
-          'cameron.williamson@abc.com',
-          '0123456789',
-          'Sales'
-        ),
-        new Candidate(
-          149,
-          'Cameron Williamson',
-          'cameron.williamson@abc.com',
-          '0123456789',
-          'Sales'
-        ),
-      ]),
-      new Column('Manager Interview', [
-        new Candidate(
-          188,
-          'Cameron Williamson',
-          'cameron.williamson@abc.com',
-          '0123456789',
-          'Sales'
-        ),
-        new Candidate(
-          158,
-          'Cameron Williamson',
-          'cameron.williamson@abc.com',
-          '0123456789',
-          'Sales'
-        ),
-        new Candidate(
-          168,
-          'Cameron Williamson',
-          'cameron.williamson@abc.com',
-          '0123456789',
-          'Sales'
-        ),
-      ]),
-      new Column('Customer Interview', [
-        new Candidate(
-          121,
-          'Cameron Williamson',
-          'cameron.williamson@abc.com',
-          '0123456789',
-          'Sales'
-        ),
-        new Candidate(
-          199,
-          'Cameron Williamson',
-          'cameron.williamson@abc.com',
-          '0123456789',
-          'Sales'
-        ),
-      ]),
-      new Column('HR Interview', [
-        new Candidate(
-          172,
-          'Cameron Williamson',
-          'cameron.williamson@abc.com',
-          '0123456789',
-          'Sales'
-        ),
-      ]),
-    ]
+    []
   );
+
+  public getAllCandidates(id: number) {
+    return this.http.get<{ data: Candidate[] }>(
+      environment.apiURL + 'api/candidates/get_candidates_by_team/' + id
+    );
+  }
+
+  public getCandidate(id: number) {
+    return this.http.get<{ data: Candidate }>(
+      environment.apiURL + 'api/candidates/candidate/' + id
+    );
+  }
+
+  public getCV(id: number) {
+    return this.http.get<any>(
+      environment.apiURL + 'api/candidates/candidate_cv/' + id,
+      { responseType: 'arraybuffer' as any }
+    );
+  }
 
   public getData(): Board {
     return this._kanbanModal;
@@ -164,4 +87,32 @@ export class DataService {
   // }
 
   //<<Stages end...
+
+  addCandidate(candidate: Candidate) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/candidates/create',
+      candidate
+    );
+  }
+
+  editCandidate(id: number, update: object) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/candidates/edit/' + id,
+      update
+    );
+  }
+
+  addTagToCandidate(candidate_id: number, tag_name: string) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/candidates/add_tag_to_candidate',
+      { candidate_id, tag_name }
+    );
+  }
+
+  removeTagFromCandidate(candidate_id: number, tag_name: string) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/candidates/delete_tag_to_candidate',
+      { candidate_id, tag_name }
+    );
+  }
 }

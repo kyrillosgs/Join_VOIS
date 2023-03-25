@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,6 +15,8 @@ import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { ChipModule } from 'primeng/chip';
 import { SidebarModule } from 'primeng/sidebar';
+import { ToastModule } from 'primeng/toast';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './features/home/home.component';
@@ -26,11 +28,22 @@ import { CandidateInfoComponent } from './features/profile/candidate-info/candid
 import { CandidateStateComponent } from './features/profile/candidate-state/candidate-state.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { KnobModule } from 'primeng/knob';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TagModule } from 'primeng/tag';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
+<<<<<<< HEAD
 import {TabViewModule} from 'primeng/tabview';
 import { TabPanelComponent } from './features/profile/tab-panel/tab-panel.component';
+=======
+import { LoginComponent } from './core/auth/login/login.component';
+import { NgxPermissionsModule } from 'ngx-permissions';
+import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
+import { windowFactory } from './core/token/window-factory';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { HeadersService } from './interceptors/Headers.service';
+import { ErrorhandlerService } from './interceptors/global-error-handler/errorhandler.service';
+>>>>>>> 023a6ef104f371c18f172b0d03dd828c9fc2df08
 
 @NgModule({
   declarations: [
@@ -42,7 +55,11 @@ import { TabPanelComponent } from './features/profile/tab-panel/tab-panel.compon
     ProfileComponent,
     CandidateInfoComponent,
     CandidateStateComponent,
+<<<<<<< HEAD
     TabPanelComponent
+=======
+    LoginComponent,
+>>>>>>> 023a6ef104f371c18f172b0d03dd828c9fc2df08
   ],
   imports: [
     BrowserModule,
@@ -65,9 +82,31 @@ import { TabPanelComponent } from './features/profile/tab-panel/tab-panel.compon
     DropdownModule,
     TagModule,
     ConfirmPopupModule,
+<<<<<<< HEAD
     TabViewModule
+=======
+    NgxPermissionsModule.forRoot(),
+    RxReactiveFormsModule,
+    FontAwesomeModule,
+    InputTextareaModule,
+    ToastModule,
+    MultiSelectModule,
   ],
-  providers: [ConfirmationService],
+  providers: [
+    ConfirmationService,
+    { provide: Window, useFactory: windowFactory },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HeadersService,
+      multi: true,
+    } /*,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorhandlerService,
+      multi: true,
+    }*/,
+>>>>>>> 023a6ef104f371c18f172b0d03dd828c9fc2df08
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

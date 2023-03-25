@@ -93,3 +93,6 @@ p-tag span.p-tag {
 .add-tag button {
   height: 1rem !important;
 }
+div.p-dropdown.p-component {
+  width: 100%;
+}

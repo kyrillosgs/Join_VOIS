@@ -17,9 +17,33 @@ export class CandidateInfoComponent implements OnInit {
   protected candidate!: Candidate;
   display: boolean = false;
   pdfSrc: any = '';
+  imgSrc: any = '';
+  downloadLink: any;
   newTag: any = '';
   addingTag: boolean = false;
   hoveredTag: number = -1;
+
+  ngOnInit(): void {
+    this.downloadLink = document.createElement('a');
+    this.dataService.getCandidate(this.candidateId).subscribe(
+      (data) => {
+        this.candidate = data.data;
+        this.imgSrc =
+          'https://hiring-tool.ahmedsaleh.net/' + this.candidate.img;
+        this.downloadLink.setAttribute('download', this.candidate.name);
+      },
+      (error) => {}
+    );
+    this.dataService.getCV(this.candidateId).subscribe(
+      (data) => {
+        this.pdfSrc = data;
+        this.downloadLink.href = window.URL.createObjectURL(
+          new Blob([this.pdfSrc], { type: 'application/pdf' })
+        );
+      },
+      (error) => {}
+    );
+  }
 
   constructor(
     route: ActivatedRoute,
@@ -30,7 +54,11 @@ export class CandidateInfoComponent implements OnInit {
     route.params.subscribe((params) => {
       this.candidateId = params['id'];
     });
-    this.getCandidate();
+  }
+
+  downloadCV() {
+    document.body.appendChild(this.downloadLink);
+    this.downloadLink.click();
   }
 
   confirmTagRemoval(event: Event, index: number) {
@@ -39,7 +67,14 @@ export class CandidateInfoComponent implements OnInit {
       message: 'Remove tag "' + (this.candidate.tags as any)[index] + '"?',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.candidate.tags?.splice(index, 1);
+        this.dataService
+          .removeTagFromCandidate(
+            this.candidateId,
+            (this.candidate.tags as any)[index]
+          )
+          .subscribe((data) => {
+            this.candidate.tags?.splice(index, 1);
+          });
       },
       reject: () => {
         //reject action
@@ -48,12 +83,9 @@ export class CandidateInfoComponent implements OnInit {
   }
 
   getCandidate() {
-    for (let column of this.dataService.getData().columns) {
-      this.candidate = column.candidates.find(
-        (candidate) => candidate.id == this.candidateId
-      ) as Candidate;
-      if (this.candidate) break;
-    }
+    return this.dataService.allCandidates.find(
+      (c) => c.id == this.candidateId
+    ) as Candidate;
   }
 
   onSidebarShow() {
@@ -61,6 +93,7 @@ export class CandidateInfoComponent implements OnInit {
   }
 
   addTagToCandidate() {
+    let tag = this.newTag.removeExtraSpaces();
     if (
       this.newTag.trim() &&
       !this.candidate.tags?.find(
@@ -69,7 +102,11 @@ export class CandidateInfoComponent implements OnInit {
           (this.newTag as any).removeExtraSpaces().toLowerCase()
       )
     )
-      this.candidate.tags?.push(this.newTag.removeExtraSpaces());
+      this.dataService
+        .addTagToCandidate(this.candidateId, tag)
+        .subscribe((data) => {
+          this.candidate.tags?.push(tag);
+        });
     this.addingTag = false;
     this.newTag = '';
   }
@@ -84,21 +121,6 @@ export class CandidateInfoComponent implements OnInit {
         this.addTag.nativeElement.querySelector('.add-tag-input').focus();
       } catch {}
     }, 100);
-  }
-
-  ngOnInit(): void {
-    this.httpClient
-      .get(this.candidate.cv as string, {
-        responseType: 'arraybuffer',
-      })
-      .subscribe(
-        async (data) => {
-          this.pdfSrc = await data;
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
   }
 }
 

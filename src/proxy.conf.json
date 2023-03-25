@@ -1,0 +1,6 @@
+{
+  "/api": {
+    "target": "https://hiring-tool.ahmedsaleh.net/",
+    "secure": false
+  }
+}
