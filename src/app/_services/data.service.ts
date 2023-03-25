@@ -58,6 +58,12 @@ export class DataService {
     );
   }
 
+  public getCandidate(id: number) {
+    return this.http.get<{ data: Candidate }>(
+      environment.apiURL + 'api/candidates/candidate/' + id
+    );
+  }
+
   public getAttachment(url: string) {
     return this.http.get<any>(environment.apiURL + url, {
       headers: new HttpHeaders({

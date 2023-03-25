@@ -22,6 +22,26 @@ export class CandidateInfoComponent implements OnInit {
   addingTag: boolean = false;
   hoveredTag: number = -1;
 
+  ngOnInit(): void {
+    if (!this.candidate) {
+      this.dataService.getCandidate(this.candidateId).subscribe(
+        (data) => {
+          this.candidate = data.data;
+          this.pdfSrc =
+            'https://hiring-tool.ahmedsaleh.net/' + this.candidate.cv;
+          this.imgSrc =
+            'https://hiring-tool.ahmedsaleh.net/' + this.candidate.img;
+        },
+        (error) => {}
+      );
+    }
+    // this.dataService
+    //   .getAttachment(this.candidate.cv as string)
+    //   .subscribe((data) => {
+    //     this.pdfSrc = data;
+    //   });
+  }
+
   constructor(
     route: ActivatedRoute,
     public dataService: DataService,
@@ -48,7 +68,7 @@ export class CandidateInfoComponent implements OnInit {
   }
 
   getCandidate() {
-    this.candidate = this.dataService.allCandidates.find(
+    return this.dataService.allCandidates.find(
       (c) => c.id == this.candidateId
     ) as Candidate;
   }
@@ -81,21 +101,6 @@ export class CandidateInfoComponent implements OnInit {
         this.addTag.nativeElement.querySelector('.add-tag-input').focus();
       } catch {}
     }, 100);
-  }
-
-  ngOnInit(): void {
-    this.getCandidate();
-    // this.dataService
-    //   .getAttachment(this.candidate.cv as string)
-    //   .subscribe((data) => {
-    //     this.pdfSrc = data;
-    //   });
-    // this.dataService
-    //   .getAttachment(this.candidate.img as string)
-    //   .subscribe((data) => {
-    //     this.imgSrc = data;
-    //   });
-    this.pdfSrc = 'https://hiring-tool.ahmedsaleh.net/' + this.candidate.cv;
   }
 }
 

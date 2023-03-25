@@ -36,10 +36,10 @@
   flex-grow: 1;
   flex-basis: 0;
   min-width: 300px;
-  margin: 50px;
-  padding: 25px;
+  margin: 1rem;
+  padding: 1rem;
   border-radius: 4px;
-  background: rgba(255, 160, 0, 0.6);
+  background: rgba(182, 182, 182, 0.6);
 }
 .board .board-wrapper .board-columns .board-column:not(:first-child) {
   margin-left: 0;
