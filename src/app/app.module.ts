@@ -32,10 +32,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TagModule } from 'primeng/tag';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
-<<<<<<< HEAD
 import {TabViewModule} from 'primeng/tabview';
 import { TabPanelComponent } from './features/profile/tab-panel/tab-panel.component';
-=======
 import { LoginComponent } from './core/auth/login/login.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
@@ -43,7 +41,6 @@ import { windowFactory } from './core/token/window-factory';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HeadersService } from './interceptors/Headers.service';
 import { ErrorhandlerService } from './interceptors/global-error-handler/errorhandler.service';
->>>>>>> 023a6ef104f371c18f172b0d03dd828c9fc2df08
 
 @NgModule({
   declarations: [
@@ -55,11 +52,8 @@ import { ErrorhandlerService } from './interceptors/global-error-handler/errorha
     ProfileComponent,
     CandidateInfoComponent,
     CandidateStateComponent,
-<<<<<<< HEAD
-    TabPanelComponent
-=======
+    TabPanelComponent,
     LoginComponent,
->>>>>>> 023a6ef104f371c18f172b0d03dd828c9fc2df08
   ],
   imports: [
     BrowserModule,
@@ -82,9 +76,7 @@ import { ErrorhandlerService } from './interceptors/global-error-handler/errorha
     DropdownModule,
     TagModule,
     ConfirmPopupModule,
-<<<<<<< HEAD
-    TabViewModule
-=======
+    TabViewModule,
     NgxPermissionsModule.forRoot(),
     RxReactiveFormsModule,
     FontAwesomeModule,
@@ -104,8 +96,7 @@ import { ErrorhandlerService } from './interceptors/global-error-handler/errorha
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorhandlerService,
       multi: true,
-    }*/,
->>>>>>> 023a6ef104f371c18f172b0d03dd828c9fc2df08
+    }*/
   ],
   bootstrap: [AppComponent],
 })
