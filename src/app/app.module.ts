@@ -29,6 +29,8 @@ import { KnobModule } from 'primeng/knob';
 import { TagModule } from 'primeng/tag';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
+import {TabViewModule} from 'primeng/tabview';
+import { TabPanelComponent } from './features/profile/tab-panel/tab-panel.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import { ConfirmationService } from 'primeng/api';
     ProfileComponent,
     CandidateInfoComponent,
     CandidateStateComponent,
+    TabPanelComponent
   ],
   imports: [
     BrowserModule,
@@ -62,6 +65,7 @@ import { ConfirmationService } from 'primeng/api';
     DropdownModule,
     TagModule,
     ConfirmPopupModule,
+    TabViewModule
   ],
   providers: [ConfirmationService],
   bootstrap: [AppComponent],

@@ -14,6 +14,7 @@ export class Candidate {
     public team_id?: number,
     public current_employer?: string,
     public linkedin_profile?: string,
-    public tags?: string[]
+    public tags?: string[],
+    public score?: number
   ) {}
 }

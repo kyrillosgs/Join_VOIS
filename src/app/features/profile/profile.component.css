@@ -1,0 +1,4 @@
+.var-color{
+    background-color: var(--bs-body-bg);
+    border-radius: 10px;
+}

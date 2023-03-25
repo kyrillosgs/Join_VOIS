@@ -7,7 +7,9 @@ import { Candidate } from '../_models/candidate';
   providedIn: 'root',
 })
 export class DataService {
-  constructor() {}
+  constructor() { }
+
+  private stages: string[] = ["Phone screening", "Technical Interview", "Manager Interview", "Customer Interview" ];
 
   private _kanbanModal: Board = new Board(
     'ServiceNow Team - DevOps & Cloud CoE',
@@ -22,13 +24,14 @@ export class DataService {
           'Full-stack .NET Developer',
           'assets/files/Kyrillos Bishai - CV.pdf',
           '',
-          '',
+          'Technical Interview',
           '',
           0,
           0,
           '',
           'https://www.linkedin.com/in/kyrillos-george-bishai/',
-          ['Problem solver', 'Hard worker', 'Familiar with Agile']
+          ['Problem solver', 'Hard worker', 'Familiar with Agile'],
+          40
         ),
         new Candidate(
           128,
@@ -150,4 +153,15 @@ export class DataService {
   public getData(): Board {
     return this._kanbanModal;
   }
+
+  //Stages>>
+  public getStages(): string[] {
+    return this.stages;
+  }
+
+  // public moveToNextStage(selectedStageCode:number){
+  //   this.selectedStage = <Istage>this.stages.find( (stage) => stage.code == selectedStageCode+1);
+  // }
+
+  //<<Stages end...
 }
