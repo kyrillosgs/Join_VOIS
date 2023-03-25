@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Candidate } from 'src/app/_models/candidate';
 import { State } from 'src/app/_models/enums/state';
+import { Team } from 'src/app/_models/team';
 import { DataService } from 'src/app/_services/data.service';
 
 @Component({
@@ -11,6 +12,7 @@ import { DataService } from 'src/app/_services/data.service';
   styleUrls: ['./add-candidate.component.css'],
 })
 export class AddCandidateComponent implements OnInit {
+  @Input() public selectedTeams: Team[] = [];
   addCandidateForm!: FormGroup;
   protected submitted: Boolean = false;
   public pdfToUpload!: string;
@@ -144,10 +146,11 @@ export class AddCandidateComponent implements OnInit {
       this.f['State'].value,
       this.f['Comments'].value,
       this.f['Recruiter'].value,
-      1,
+      this.f['Team Id'].value,
       this.f['Current Employer'].value,
       this.linkedinPrefix + this.f['Linkedin Profile'].value
     );
+    console.log(cand);
     this.dataService.addCandidate(cand).subscribe(
       (data) => {
         if (data.success) {
@@ -208,7 +211,8 @@ export class AddCandidateComponent implements OnInit {
       'Proposed Position': ['', [Validators.required]],
       'Current Position': ['', [Validators.required]],
       'Linkedin Profile': ['', [Validators.required]],
-      State: ['', [Validators.required]],
+      State: ['pending_review', [Validators.required]],
+      'Team Id': ['', [Validators.required]],
       'Current Employer': ['', [Validators.required]],
       Recruiter: ['', [Validators.required]],
       Comments: ['', [Validators.required]],

@@ -64,13 +64,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   async removeTeamCandidates(id: number) {
     let candidates = this._dataService.allCandidates;
-    for (let c in candidates) {
+    for (let c = 0; c < candidates.length; c++) {
       if (candidates[c].team_id == id) {
-        this._dataService.allCandidates.splice(Number(c), 1);
-        this._dataService.drawBoard();
-        // console.log(candidates);
+        this._dataService.allCandidates.splice(c, 1);
+        c--;
       }
     }
+    this._dataService.drawBoard();
   }
 
   ngOnInit() {

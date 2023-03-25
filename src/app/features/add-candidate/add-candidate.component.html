@@ -125,30 +125,6 @@
     </div>
   </div>
   <div class="col-md-12 col-lg-6">
-    <label class="form-label" for="ccurrentemployer">Current Employer:</label>
-    <input
-      type="text"
-      id="ccurrentemployer"
-      pInputText
-      class="form-control"
-      formControlName="Current Employer"
-      [ngClass]="{
-        'is-invalid': f['Current Employer'].errors && submitted,
-        'is-valid': !f['Current Employer'].errors && submitted
-      }"
-      value=""
-      placeholder="Candidate Current Employer"
-    />
-    <div
-      *ngIf="f['Current Employer'].errors && submitted"
-      class="invalid-feedback"
-    >
-      <div *ngIf="f['Current Employer'].errors['required']">
-        Candidate current employer is required
-      </div>
-    </div>
-  </div>
-  <div class="col-md-12 col-lg-6">
     <label class="form-label" for="ccurrentposition">Current Position:</label>
     <input
       type="text"
@@ -169,6 +145,30 @@
     >
       <div *ngIf="f['Current Position'].errors['required']">
         Candidate current position is required
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 col-lg-6">
+    <label class="form-label" for="ccurrentemployer">Current Employer:</label>
+    <input
+      type="text"
+      id="ccurrentemployer"
+      pInputText
+      class="form-control"
+      formControlName="Current Employer"
+      [ngClass]="{
+        'is-invalid': f['Current Employer'].errors && submitted,
+        'is-valid': !f['Current Employer'].errors && submitted
+      }"
+      value=""
+      placeholder="Candidate Current Employer"
+    />
+    <div
+      *ngIf="f['Current Employer'].errors && submitted"
+      class="invalid-feedback"
+    >
+      <div *ngIf="f['Current Employer'].errors['required']">
+        Candidate current employer is required
       </div>
     </div>
   </div>
@@ -201,7 +201,7 @@
       </div>
     </div>
   </div>
-  <div class="col-12">
+  <div class="col-6">
     <label class="form-label" for="cstate">State:</label>
     <p-dropdown
       formControlName="State"
@@ -219,6 +219,27 @@
     <div *ngIf="f['State'].errors && submitted" class="invalid-feedback">
       <div *ngIf="f['State'].errors['required']">
         You must specify the state of the candidate
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <label class="form-label" for="cteamid">Team:</label>
+    <p-dropdown
+      formControlName="Team Id"
+      [options]="selectedTeams"
+      optionLabel="name"
+      optionValue="id"
+      id="cteamid"
+      [ngClass]="{
+        'is-invalid': f['Team Id'].errors && submitted,
+        'is-valid': !f['Team Id'].errors && submitted
+      }"
+      styleClass="form-control"
+      placeholder="Candidate Team"
+    ></p-dropdown>
+    <div *ngIf="f['Team Id'].errors && submitted" class="invalid-feedback">
+      <div *ngIf="f['Team Id'].errors['required']">
+        You must specify the team of the candidate
       </div>
     </div>
   </div>

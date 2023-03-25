@@ -1,17 +1,20 @@
 <div class="board">
   <div class="board-header">
     <p class="board-name">
-      <p-multiSelect
-        [options]="teams"
-        [(ngModel)]="selectedTeams"
-        defaultLabel="Select a Team"
-        optionLabel="name"
-        display="chip"
-        (onChange)="changeTeams($event)"
-      ></p-multiSelect>
+      <span class="p-float-label">
+        <p-multiSelect
+          id="ms-teams"
+          [options]="teams"
+          [(ngModel)]="selectedTeams"
+          optionLabel="name"
+          display="chip"
+          (onChange)="changeTeams($event)"
+        ></p-multiSelect>
+        <label for="ms-teams">Select Teams</label>
+      </span>
     </p>
   </div>
-  <div class="board-wrapper">
+  <div class="board-wrapper" *ngIf="selectedTeams.length">
     <div class="board-columns" cdkDropListGroup>
       <div class="board-column" *ngFor="let column of Board.columns">
         <div class="columns column-title">
@@ -31,7 +34,9 @@
               *ngIf="column.name == 'Pending Review'"
             >
               <ng-template pTemplate="header">New Candidate</ng-template>
-              <app-add-candidate></app-add-candidate>
+              <app-add-candidate
+                [selectedTeams]="selectedTeams"
+              ></app-add-candidate>
               <ng-template pTemplate="footer">
                 <button
                   pButton
