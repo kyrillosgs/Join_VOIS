@@ -16,6 +16,7 @@ export class AccountService {
   {
     return this.http.post<AppBaseResponse<AuthenticationResponse>>('https://hiring-tool.ahmedsaleh.net/api/login', model);
   } 
+  refreshToken = (model: any): Observable<AppBaseResponse<any>> => this.http.post<any>('https://hiring-tool.ahmedsaleh.net/api/refresh_token', model);
   
   
   // public getAll<T>(
