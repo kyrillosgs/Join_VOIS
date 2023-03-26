@@ -34,6 +34,8 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
+import { TabViewModule } from 'primeng/tabview';
+import { TabPanelComponent } from './features/profile/tab-panel/tab-panel.component';
 import { LoginComponent } from './core/auth/login/login.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
@@ -41,7 +43,7 @@ import { windowFactory } from './core/token/window-factory';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HeadersService } from './interceptors/Headers.service';
 import { ErrorhandlerService } from './interceptors/global-error-handler/errorhandler.service';
-import {MessageService} from 'primeng/api';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -53,6 +55,7 @@ import {MessageService} from 'primeng/api';
     ProfileComponent,
     CandidateInfoComponent,
     CandidateStateComponent,
+    TabPanelComponent,
     LoginComponent,
   ],
   imports: [
@@ -76,13 +79,14 @@ import {MessageService} from 'primeng/api';
     DropdownModule,
     TagModule,
     ConfirmPopupModule,
+    TabViewModule,
     NgxPermissionsModule.forRoot(),
     RxReactiveFormsModule,
     FontAwesomeModule,
     InputTextareaModule,
     ToastModule,
     MultiSelectModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
   ],
   providers: [
     ConfirmationService,
@@ -92,7 +96,7 @@ import {MessageService} from 'primeng/api';
       provide: HTTP_INTERCEPTORS,
       useClass: HeadersService,
       multi: true,
-    } ,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorhandlerService,
@@ -101,4 +105,4 @@ import {MessageService} from 'primeng/api';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

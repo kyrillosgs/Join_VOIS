@@ -45,7 +45,9 @@ export class DataService {
     ]);
   }
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+
+  private stages: string[] = ["Phone screening", "Technical Interview", "Manager Interview", "Customer Interview" ];
 
   private _kanbanModal: Board = new Board(
     'ServiceNow Team - DevOps & Cloud CoE',
@@ -74,6 +76,17 @@ export class DataService {
   public getData(): Board {
     return this._kanbanModal;
   }
+
+  //Stages>>
+  public getStages(): string[] {
+    return this.stages;
+  }
+
+  // public moveToNextStage(selectedStageCode:number){
+  //   this.selectedStage = <Istage>this.stages.find( (stage) => stage.code == selectedStageCode+1);
+  // }
+
+  //<<Stages end...
 
   addCandidate(candidate: Candidate) {
     return this.http.post<any>(

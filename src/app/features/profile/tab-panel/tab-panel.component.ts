@@ -4,28 +4,27 @@ import { ActivatedRoute } from '@angular/router';
 import { Candidate } from 'src/app/_models/candidate';
 import { DataService } from 'src/app/_services/data.service';
 
-
-
 @Component({
-  selector: 'app-candidate-state',
-  templateUrl: './candidate-state.component.html',
-  styleUrls: ['./candidate-state.component.css']
+  selector: 'app-tab-panel',
+  templateUrl: './tab-panel.component.html',
+  styleUrls: ['./tab-panel.component.css']
 })
-export class CandidateStateComponent implements OnInit {
+export class TabPanelComponent implements OnInit {
   public candidateId!: number;
   protected candidate!: Candidate;
-  
-  
-  allStages = this.dataService.getStages();
-    constructor(
-      route: ActivatedRoute,
-      public dataService: DataService,
-      public httpClient: HttpClient) {
-        route.params.subscribe((params) => {
-          this.candidateId = params['id'];
-        });
-        this.getCandidate();
-    }
+
+
+  scrollableTabs = this.dataService.getStages();
+
+  constructor(
+    route: ActivatedRoute,
+    public dataService: DataService,
+    public httpClient: HttpClient) {
+    route.params.subscribe((params) => {
+      this.candidateId = params['id'];
+    });
+    this.getCandidate();
+  }
 
   ngOnInit() {
   }
@@ -39,4 +38,5 @@ export class CandidateStateComponent implements OnInit {
     }
   }
 
+  //scrollableTabs: any[] = Array.from({ length: 50 }, (_, i) => ({ title: `Tab ${i + 1}`, content: `Tab ${i + 1} Content` }));
 }
