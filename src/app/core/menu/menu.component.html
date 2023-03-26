@@ -5,10 +5,22 @@
 
 <p-menubar [model]="items">
   <ng-template pTemplate="start">
-
-      <img src="assets/images/vodafone-logo.png" class="mr-2 logo-app" />
+    <img src="assets/images/vodafone-logo.png" class="mr-2 logo-app" />
   </ng-template>
   <ng-template pTemplate="end">
-    <button pButton pRipple type="button" label="Logout" class="p-button-outlined p-button-danger" (click)="showLogOut()"></button>
-</ng-template>
+    <button
+      pButton
+      pRipple
+      type="button"
+      label="Logout"
+      class="p-button-outlined p-button-danger"
+      (click)="showLogOut()"
+    ></button>
+  </ng-template>
 </p-menubar>
+
+<p-confirmDialog
+  header="Confirmation"
+  icon="pi pi-exclamation-triangle"
+  [key]="'logout'"
+></p-confirmDialog>

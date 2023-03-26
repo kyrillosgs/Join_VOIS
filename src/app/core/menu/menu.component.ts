@@ -1,6 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ConfirmationService, ConfirmEventType, MenuItem, MessageService } from 'primeng/api';
+import {
+  ConfirmationService,
+  ConfirmEventType,
+  MenuItem,
+  MessageService,
+} from 'primeng/api';
 import { LocalStorageKeys } from 'src/app/_models/enums/local-storage-keys.enum';
 import { AuthService } from 'src/app/_services/auth.service';
 import { LocalStorageService } from 'src/app/_services/LocalStorage.service';
@@ -10,25 +15,24 @@ import { LocalStorageService } from 'src/app/_services/LocalStorage.service';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css'],
 })
-export class MenuComponent {
+export class MenuComponent implements OnInit {
   protected items!: MenuItem[];
   //showHeader:boolean=false;
-  
-  constructor(private confirmationService: ConfirmationService,
+
+  constructor(
+    private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private authService: AuthService,
     private router: Router,
     private localStorageService: LocalStorageService
-  ) { }
+  ) {}
   ngOnInit() {
-
-
     this.items = [
-    {
-      label: 'Dashboard',
-      icon: 'pi pi-home',
-      routerLink: '/home'
-    }
+      {
+        label: 'Pipeline',
+        icon: 'pi pi-home',
+        routerLink: '/home',
+      },
     ];
   }
 
@@ -37,6 +41,7 @@ export class MenuComponent {
       message: 'Are you sure that you want to logout?',
       header: 'Logout',
       icon: 'pi pi-exclamation-triangle',
+      key: 'logout',
       accept: () => {
         this.authService.signOut();
         this.router.navigate(['/login']);
@@ -51,7 +56,7 @@ export class MenuComponent {
             //this.messageService.add({severity:'warn', summary:'Cancelled', detail:'You have cancelled'});
             break;
         }
-      }
+      },
     });
   }
 }

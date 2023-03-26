@@ -66,6 +66,7 @@ export class CandidateInfoComponent implements OnInit {
       target: event.target as any,
       message: 'Remove tag "' + (this.candidate.tags as any)[index] + '"?',
       icon: 'pi pi-exclamation-triangle',
+      key: 'removeTag',
       accept: () => {
         this.dataService
           .removeTagFromCandidate(

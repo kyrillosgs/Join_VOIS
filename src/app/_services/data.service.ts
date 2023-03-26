@@ -5,12 +5,15 @@ import { Candidate } from '../_models/candidate';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { State } from '../_models/enums/state';
+import { AuthService } from './auth.service';
+import { User } from '../_models/user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
   public allCandidates: Candidate[] = [];
+  public loggedInUser!: User;
   drawBoard(): void {
     this.allCandidates.sort((a: Candidate, b: Candidate) => {
       if ((a.state as any) > (b.state as any)) return 1;
@@ -45,9 +48,16 @@ export class DataService {
     ]);
   }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) {
+    this.loggedInUser = authService.getTokenDataAfterDecode().user;
+  }
 
-  private stages: string[] = ["Phone screening", "Technical Interview", "Manager Interview", "Customer Interview" ];
+  private stages: string[] = [
+    'Phone screening',
+    'Technical Interview',
+    'Manager Interview',
+    'Customer Interview',
+  ];
 
   private _kanbanModal: Board = new Board(
     'ServiceNow Team - DevOps & Cloud CoE',
