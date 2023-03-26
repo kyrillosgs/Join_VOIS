@@ -41,15 +41,19 @@ export class AuthGuard implements CanActivate {
   ): Promise<boolean | any> {
     const userToken = this.locatStorageService.getSessionStorage(LocalStorageKeys.APP_TOKEN);
     if (!userToken || this.authService.isTokenExpired()) {
-      //this.alertService.showToastError('Login Error', false, 2000);
-      this.authService.signOut();
-      this.router.navigate(['/login']);
-      return false;
-
+      const isRefreshSuccess = await this.authService.refreshingTokens(userToken);
+      if (!isRefreshSuccess) {
+        this.authService.signOut();
+        this.router.navigate(['/login']);
+        return false;
+      } else {
+        this.permissionService.loadPermissions(this.authService.getUserRoles());
+        return true;
+      }
     }
     else {
-      //this.permissionService.loadPermissions(this.authService.getUserRoles());
-      this.permissionService.loadPermissions([AppUserRoles.ADMIN]);
+      this.permissionService.loadPermissions(this.authService.getUserRoles());
+      //this.permissionService.loadPermissions([AppUserRoles.ADMIN]);
       return true;
     }
   }

@@ -51,6 +51,7 @@ export class AuthService {
   signOut() {
     this.localStorageService.removeSession(LocalStorageKeys.APP_TOKEN);
     this.localStorageService.removeSession(LocalStorageKeys.APP_LOGGED_IN);
+    this.localStorageService.removeSession(LocalStorageKeys.APP_REFRESH_TOKEN);
     this.setLoginState(false);
     this.isUserLoggedIn$.next(false);
   }
@@ -110,7 +111,7 @@ export class AuthService {
     );
 
     if (tokenData) {
-      return this.getDecodedData(tokenData).roles!.split(',');
+      return this.getDecodedData(tokenData)?.user?.role?.split(',');
     } else {
       return [];
     }
@@ -127,41 +128,41 @@ export class AuthService {
   }
 
 
-  // getRefreshToken(): string | null {
-  //   const refreshToken: string | null = this.localStorageService.getSessionStorage(LocalStorageKeys.APP_REFRESH_TOKEN);
-  //   return refreshToken;
-  // }
+  getRefreshToken(): string | null {
+    const refreshToken: string | null = this.localStorageService.getSessionStorage(LocalStorageKeys.APP_REFRESH_TOKEN);
+    return refreshToken;
+  }
 
-  // refreshToken() {
-  //   const tokenModel = {
-  //     accessToken: this.getToken(),
-  //     refreshToken: this.getRefreshToken()
-  //   };
-  //   return this.httpCall.post<AppBaseResponse<any>>(AppServers.APP_SERVER, 'refresh-token', tokenModel);
-  // }
+  refreshToken() {
+    const tokenModel = {
+      accessToken: this.getToken(),
+      refresh_token: this.getRefreshToken()
+    };
+    return this.http.post<any>('https://hiring-tool.ahmedsaleh.net/api/refresh_token', tokenModel);
+  }
 
 
-  // async refreshingTokens(token: string | null): Promise<boolean> {
-  //   const refreshToken: string | null = this.localStorageService.getSessionStorage(LocalStorageKeys.APP_REFRESH_TOKEN);
+  async refreshingTokens(token: string | null): Promise<boolean> {
+    const refreshToken: string | null = this.localStorageService.getSessionStorage(LocalStorageKeys.APP_REFRESH_TOKEN);
 
-  //   if (!token || !refreshToken) {
-  //     return false;
-  //   }
+    if (!token || !refreshToken) {
+      return false;
+    }
 
-  //   const tokenModel = { accessToken: token, refreshToken: refreshToken };
-  //   let isRefreshSuccess: boolean;
-  //   try {
-  //     const response = await this.accountService.refreshToken(tokenModel).toPromise();
-  //     const newToken = (<any>response).content.accessToken;
-  //     const newRefreshToken = (<any>response).content.refreshToken;
-  //     this.localStorageService.setSessionStorage(LocalStorageKeys.APP_TOKEN, newToken);
-  //     this.localStorageService.setSessionStorage(LocalStorageKeys.APP_REFRESH_TOKEN, newRefreshToken);
-  //     isRefreshSuccess = true;
-  //   }
-  //   catch (ex) {
-  //     isRefreshSuccess = false;
-  //   }
-  //   return isRefreshSuccess;
-  // }
+    const tokenModel = { accessToken: token, refresh_token: refreshToken };
+    let isRefreshSuccess: boolean;
+    try {
+      const response = await this.accountService.refreshToken(tokenModel).toPromise();
+      const newToken = (<any>response).token;
+      const newRefreshToken = (<any>response).refresh_token;
+      this.localStorageService.setSessionStorage(LocalStorageKeys.APP_TOKEN, newToken);
+      this.localStorageService.setSessionStorage(LocalStorageKeys.APP_REFRESH_TOKEN, newRefreshToken);
+      isRefreshSuccess = true;
+    }
+    catch (ex) {
+      isRefreshSuccess = false;
+    }
+    return isRefreshSuccess;
+  }
 
 }
