@@ -44,6 +44,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HeadersService } from './interceptors/Headers.service';
 import { ErrorhandlerService } from './interceptors/global-error-handler/errorhandler.service';
 import { MessageService } from 'primeng/api';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { MessageService } from 'primeng/api';
     ToastModule,
     MultiSelectModule,
     ConfirmDialogModule,
+    TableModule
   ],
   providers: [
     ConfirmationService,

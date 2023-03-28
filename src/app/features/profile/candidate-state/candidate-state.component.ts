@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Candidate } from 'src/app/_models/candidate';
 import { DataService } from 'src/app/_services/data.service';
-
+import { State } from 'src/app/_models/enums/state';
 
 
 @Component({
@@ -14,9 +14,9 @@ import { DataService } from 'src/app/_services/data.service';
 export class CandidateStateComponent implements OnInit {
   public candidateId!: number;
   protected candidate!: Candidate;
+  allStages : any[]=[];
   
   
-  allStages = this.dataService.getStages();
     constructor(
       route: ActivatedRoute,
       public dataService: DataService,
@@ -25,6 +25,8 @@ export class CandidateStateComponent implements OnInit {
           this.candidateId = params['id'];
         });
         this.getCandidate();
+        for (let i in State)
+          this.allStages.push({ optionLabel: (State as any)[i], optionValue: i });
     }
 
   ngOnInit() {

@@ -3,7 +3,10 @@ li{
     background: #c8c8c8 !important;
     
 }
-/* 
+.float-right{
+    float: right;
+}
+
 :host ::ng-deep .tabview-custom {
     i, span {
         vertical-align: middle;
@@ -21,4 +24,4 @@ li{
 :host ::ng-deep .p-tabview p {
     line-height: 1.5;
     margin: 0;
-} */
+} 
