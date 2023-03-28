@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { State } from '../_models/enums/state';
 import { AuthService } from './auth.service';
 import { User } from '../_models/user';
+import { Team } from '../_models/team';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,8 @@ import { User } from '../_models/user';
 export class DataService {
   public allCandidates: Candidate[] = [];
   public loggedInUser!: User;
+  public selectedTeamsCache: Team[] = [];
+
   drawBoard(): void {
     this.allCandidates.sort((a: Candidate, b: Candidate) => {
       if ((a.state as any) > (b.state as any)) return 1;
@@ -123,6 +126,12 @@ export class DataService {
     return this.http.post<any>(
       environment.apiURL + 'api/candidates/delete_tag_to_candidate',
       { candidate_id, tag_name }
+    );
+  }
+
+  getUser(id: number) {
+    return this.http.get<{ data: User }>(
+      environment.apiURL + 'api/users/user/' + id
     );
   }
 }

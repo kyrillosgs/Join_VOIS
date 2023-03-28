@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Candidate } from 'src/app/_models/candidate';
 import { DataService } from 'src/app/_services/data.service';
@@ -13,8 +13,7 @@ import { ConfirmationService } from 'primeng/api';
 export class CandidateInfoComponent implements OnInit {
   @ViewChild('addTag') public addTag!: ElementRef;
 
-  public candidateId!: number;
-  protected candidate!: Candidate;
+  @Input() candidate!: Candidate;
   display: boolean = false;
   pdfSrc: any = '';
   imgSrc: any = '';
@@ -25,16 +24,10 @@ export class CandidateInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.downloadLink = document.createElement('a');
-    this.dataService.getCandidate(this.candidateId).subscribe(
-      (data) => {
-        this.candidate = data.data;
-        this.imgSrc =
-          'https://hiring-tool.ahmedsaleh.net/' + this.candidate.img;
-        this.downloadLink.setAttribute('download', this.candidate.name);
-      },
-      (error) => {}
-    );
-    this.dataService.getCV(this.candidateId).subscribe(
+
+    this.imgSrc = 'https://hiring-tool.ahmedsaleh.net/' + this.candidate.img;
+    this.downloadLink.setAttribute('download', this.candidate.name);
+    this.dataService.getCV(this.candidate.id).subscribe(
       (data) => {
         this.pdfSrc = data;
         this.downloadLink.href = window.URL.createObjectURL(
@@ -46,15 +39,9 @@ export class CandidateInfoComponent implements OnInit {
   }
 
   constructor(
-    route: ActivatedRoute,
     public dataService: DataService,
-    public httpClient: HttpClient,
     private confirmationService: ConfirmationService
-  ) {
-    route.params.subscribe((params) => {
-      this.candidateId = params['id'];
-    });
-  }
+  ) {}
 
   downloadCV() {
     document.body.appendChild(this.downloadLink);
@@ -70,7 +57,7 @@ export class CandidateInfoComponent implements OnInit {
       accept: () => {
         this.dataService
           .removeTagFromCandidate(
-            this.candidateId,
+            this.candidate.id,
             (this.candidate.tags as any)[index]
           )
           .subscribe((data) => {
@@ -85,7 +72,7 @@ export class CandidateInfoComponent implements OnInit {
 
   getCandidate() {
     return this.dataService.allCandidates.find(
-      (c) => c.id == this.candidateId
+      (c) => c.id == this.candidate.id
     ) as Candidate;
   }
 
@@ -104,7 +91,7 @@ export class CandidateInfoComponent implements OnInit {
       )
     )
       this.dataService
-        .addTagToCandidate(this.candidateId, tag)
+        .addTagToCandidate(this.candidate.id, tag)
         .subscribe((data) => {
           this.candidate.tags?.push(tag);
         });

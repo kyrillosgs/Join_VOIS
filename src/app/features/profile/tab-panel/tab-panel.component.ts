@@ -1,6 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Input } from '@angular/core';
 import { Candidate } from 'src/app/_models/candidate';
 import { State } from 'src/app/_models/enums/state';
 import { DataService } from 'src/app/_services/data.service';
@@ -11,8 +9,7 @@ import { DataService } from 'src/app/_services/data.service';
   styleUrls: ['./tab-panel.component.scss']
 })
 export class TabPanelComponent implements OnInit {
-  public candidateId!: number;
-  protected candidate!: Candidate;
+  @Input() candidate!: Candidate;
   allStages : any[]=[];
   topics=[
     {
@@ -25,7 +22,6 @@ export class TabPanelComponent implements OnInit {
       name:"DataBase Questions",
       code: 2
     }];
-
   questions = [
     {
     question:"oop question1",
@@ -53,30 +49,12 @@ export class TabPanelComponent implements OnInit {
   }
 ];
 
-  constructor(
-    route: ActivatedRoute,
-    public dataService: DataService,
-    public httpClient: HttpClient) {
-    route.params.subscribe((params) => {
-      this.candidateId = params['id'];
-    });
-    this.getCandidate();
+  constructor(public dataService: DataService) {
     for (let i in State)
     this.allStages.push({ optionLabel: (State as any)[i], optionValue: i });
-
   }
 
-  ngOnInit() {
-  }
-
-  getCandidate() {
-    for (let column of this.dataService.getData().columns) {
-      this.candidate = column.candidates.find(
-        (candidate) => candidate.id == this.candidateId
-      ) as Candidate;
-      if (this.candidate) break;
-    }
-  }
+  ngOnInit() {}
 
   //scrollableTabs: any[] = Array.from({ length: 50 }, (_, i) => ({ title: `Tab ${i + 1}`, content: `Tab ${i + 1} Content` }));
 }

@@ -1,16 +1,25 @@
 <div class="fluid-container m-2">
   <div class="row">
     <div class="col-sm-12 col-md-4 col-lg-4 bg-secondary-subtle">
-      <app-candidate-info></app-candidate-info>
+      <app-candidate-info
+        [candidate]="candidate"
+        *ngIf="candidate"
+      ></app-candidate-info>
     </div>
 
     <div class="col-sm-12 col-md-8 col-lg-8 bg-secondary-subtle">
       <div class="col-12 var-color">
-        <app-candidate-state></app-candidate-state>
+        <app-candidate-state
+          [candidate]="candidate"
+          *ngIf="candidate"
+        ></app-candidate-state>
       </div>
 
       <div class="col-12">
-        <app-tab-panel></app-tab-panel>
+        <app-tab-panel
+          [candidate]="candidate"
+          *ngIf="candidate"
+        ></app-tab-panel>
       </div>
     </div>
   </div>

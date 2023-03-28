@@ -1,11 +1,13 @@
+import { Team } from './team';
+
 export class User {
   constructor(
-    id: string,
-    name: string,
-    email: string,
-    role: string,
-    team_id: number,
-    teams: [],
-    img?: string
+    public id: string,
+    public name: string,
+    public email: string,
+    public role: string,
+    public team_id: number,
+    public teams: Team[],
+    public img?: string
   ) {}
 }
