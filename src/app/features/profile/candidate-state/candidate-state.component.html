@@ -10,7 +10,7 @@
     <div class="p-grid p-formgrid p-text-center col-sm-12 col-md-6 col-lg-4 p-4">
       <div class="p-field p-col-12 p-md-4 p-text-center">
         <h5 class="p-mt-3">Stage:</h5>
-        <p-dropdown [options]="allStages" [(ngModel)]="candidate.state" ></p-dropdown>
+        <p-dropdown [options]="allStages" [(ngModel)]="candidate.state" optionLabel="optionLabel" optionValue="optionValue" [disabled]="true"></p-dropdown>
 
       </div>
     </div>
