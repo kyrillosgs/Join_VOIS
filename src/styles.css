@@ -98,8 +98,9 @@ div.p-dropdown.p-component {
 }
 div.p-multiselect.p-component.p-multiselect-chip {
   width: 100%;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 1rem;
+  /* margin-bottom: 2rem; */
+  min-width: 15rem;
 }
 .p-float-label input:focus ~ label,
 .p-float-label input.p-filled ~ label,
@@ -107,5 +108,18 @@ div.p-multiselect.p-component.p-multiselect-chip {
 .p-float-label textarea.p-filled ~ label,
 .p-float-label .p-inputwrapper-focus ~ label,
 .p-float-label .p-inputwrapper-filled ~ label {
-  top: 1.5rem;
+  top: 0.5rem;
+}
+.p-checkbox .p-checkbox-box.p-highlight,
+.p-multiselect.p-multiselect-chip .p-multiselect-token,
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight {
+  background: #e10000;
+}
+.p-checkbox .p-checkbox-box.p-highlight:hover {
+  background: #810000 !important;
+  border-color: #810000 !important;
+}
+.p-inputtext:enabled:focus {
+  box-shadow: 0 0 0 0.2rem #ffcece;
+  border-color: #e10000;
 }

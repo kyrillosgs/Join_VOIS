@@ -1,19 +1,5 @@
 <div class="board">
-  <div class="board-header">
-    <p class="board-name">
-      <span class="p-float-label">
-        <p-multiSelect
-          id="ms-teams"
-          [options]="teams"
-          [(ngModel)]="selectedTeams"
-          optionLabel="name"
-          display="chip"
-          (onChange)="changeTeams($event)"
-        ></p-multiSelect>
-        <label for="ms-teams">Select Teams</label>
-      </span>
-    </p>
-  </div>
+  <div class="board-header"></div>
   <div class="board-wrapper" *ngIf="selectedTeams.length">
     <div class="board-columns" cdkDropListGroup>
       <div class="board-column" *ngFor="let column of Board.columns">

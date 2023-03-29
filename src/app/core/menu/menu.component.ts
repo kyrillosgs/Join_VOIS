@@ -7,7 +7,9 @@ import {
   MessageService,
 } from 'primeng/api';
 import { LocalStorageKeys } from 'src/app/_models/enums/local-storage-keys.enum';
+import { Team } from 'src/app/_models/team';
 import { AuthService } from 'src/app/_services/auth.service';
+import { DataService } from 'src/app/_services/data.service';
 import { LocalStorageService } from 'src/app/_services/LocalStorage.service';
 
 @Component({
@@ -17,13 +19,48 @@ import { LocalStorageService } from 'src/app/_services/LocalStorage.service';
 })
 export class MenuComponent implements OnInit {
   protected items!: MenuItem[];
+  loading: boolean = true;
+  teams: Team[] = [];
+  selectedTeams: Team[] = this.dataService.selectedTeamsCache;
   //showHeader:boolean=false;
+
+  changeTeams(e: any) {
+    if (!e.itemValue && e.value.length == 0) this.clearBoard();
+    else if (this.selectedTeams.find((t) => t.id == e.itemValue.id))
+      this.retrieveTeamCandidates(e.itemValue.id);
+    else this.removeTeamCandidates(e.itemValue.id);
+  }
+
+  clearBoard() {
+    this.dataService.allCandidates = [];
+    this.dataService.drawBoard();
+  }
+
+  retrieveTeamCandidates(id: number) {
+    this.dataService.getAllCandidates(id).subscribe(async (data) => {
+      this.dataService.allCandidates.push(...(await data.data));
+      this.dataService.drawBoard();
+      this.loading = false;
+    });
+  }
+
+  async removeTeamCandidates(id: number) {
+    let candidates = this.dataService.allCandidates;
+    for (let c = 0; c < candidates.length; c++) {
+      if (candidates[c].team_id == id) {
+        this.dataService.allCandidates.splice(c, 1);
+        c--;
+      }
+    }
+    this.dataService.drawBoard();
+  }
 
   constructor(
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private authService: AuthService,
     private router: Router,
+    private dataService: DataService,
     private localStorageService: LocalStorageService
   ) {}
   ngOnInit() {
@@ -33,7 +70,45 @@ export class MenuComponent implements OnInit {
         icon: 'pi pi-home',
         routerLink: '/home',
       },
+      {
+        label: 'Open Positions',
+        icon: 'pi pi-briefcase',
+        // routerLink: '/home',
+        disabled: true,
+      },
+      {
+        label: 'Question Bank',
+        icon: 'pi pi-question',
+        // routerLink: '/home',
+        disabled: true,
+      },
+      {
+        label: 'Tags Dashboard',
+        icon: 'pi pi-tags',
+        // routerLink: '/home',
+        disabled: true,
+      },
+      { separator: true },
+      {
+        label: 'Logout',
+        icon: 'pi pi-sign-out',
+        command: (event) => {
+          this.showLogOut();
+        },
+        style: { '-webkit-text-stroke': '1px #e10000' },
+      },
     ];
+    this.teams = this.dataService.loggedInUser.teams;
+    this.dataService.allCandidates = [];
+    if (this.selectedTeams.length == 0) {
+      this.selectedTeams.push(this.teams[0]);
+      this.retrieveTeamCandidates(this.selectedTeams[0].id);
+    } else {
+      this.dataService.drawBoard();
+      this.selectedTeams.forEach((t) => {
+        this.retrieveTeamCandidates(t.id);
+      });
+    }
   }
 
   showLogOut(): void {

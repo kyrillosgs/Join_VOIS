@@ -1,22 +1,19 @@
-<!-- <p-menubar [model]="items">
-  <input type="text" pInputText placeholder="Search" />
-  <button pButton label="Logout" icon="pi pi-power-off"></button>
-</p-menubar> -->
-
 <p-menubar [model]="items">
   <ng-template pTemplate="start">
     <img src="assets/images/vodafone-logo.png" class="mr-2 logo-app" />
   </ng-template>
   <ng-template pTemplate="end">
-    <button
-      pButton
-      pRipple
-      type="button"
-      label="Logout"
-      class="p-button-outlined p-button-danger"
-      icon="pi pi-sign-out"
-      (click)="showLogOut()"
-    ></button>
+    <span class="p-float-label">
+      <p-multiSelect
+        id="ms-teams"
+        [options]="teams"
+        [(ngModel)]="selectedTeams"
+        optionLabel="name"
+        display="chip"
+        (onChange)="changeTeams($event)"
+      ></p-multiSelect>
+      <label for="ms-teams">Select Teams</label>
+    </span>
   </ng-template>
 </p-menubar>
 

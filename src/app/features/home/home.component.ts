@@ -32,12 +32,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.addCandidateComponent.add();
   }
 
-  changeTeams(e: any) {
-    if (this.selectedTeams.find((t) => t.id == e.itemValue.id))
-      this.retrieveTeamCandidates(e.itemValue.id);
-    else this.removeTeamCandidates(e.itemValue.id);
-  }
-
   public resetCandidate() {
     this.addCandidateComponent.resetAddCandidateForm();
   }
@@ -54,37 +48,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.display = true;
   }
 
-  retrieveTeamCandidates(id: number) {
-    this.dataService.getAllCandidates(id).subscribe(async (data) => {
-      this.dataService.allCandidates.push(...(await data.data));
-      this.dataService.drawBoard();
-      this.loading = false;
-    });
-  }
-
-  async removeTeamCandidates(id: number) {
-    let candidates = this.dataService.allCandidates;
-    for (let c = 0; c < candidates.length; c++) {
-      if (candidates[c].team_id == id) {
-        this.dataService.allCandidates.splice(c, 1);
-        c--;
-      }
-    }
-    this.dataService.drawBoard();
-  }
-
   ngOnInit() {
-    this.teams = this.dataService.loggedInUser.teams;
-    this.dataService.allCandidates = [];
-    if (this.selectedTeams.length == 0) {
-      this.selectedTeams.push(this.teams[0]);
-      this.retrieveTeamCandidates(this.selectedTeams[0].id);
-    } else {
-      this.dataService.drawBoard();
-      this.selectedTeams.forEach((t) => {
-        this.retrieveTeamCandidates(t.id);
-      });
-    }
     this.router.events
       .pipe(
         filter((event: any) => event instanceof NavigationEnd),
