@@ -5,6 +5,7 @@ import { Candidate } from 'src/app/_models/candidate';
 import { State } from 'src/app/_models/enums/state';
 import { Team } from 'src/app/_models/team';
 import { DataService } from 'src/app/_services/data.service';
+import * as pdfjsLib from 'pdfjs-dist';
 
 @Component({
   selector: 'app-add-candidate',
@@ -27,6 +28,18 @@ export class AddCandidateComponent implements OnInit {
   pdfSize!: number | string;
   pdfName = '';
   linkedinPrefix: string = 'https://www.linkedin.com/in/';
+
+  public async readPdf(pdfUrl: string): Promise<string> {
+    const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+    const countPromises = []; // collecting all page promises
+    for (let i = 1; i <= pdf._pdfInfo.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      countPromises.push(textContent.items.map((s: any) => s.str).join(''));
+    }
+    const pageContents = await Promise.all(countPromises);
+    return pageContents.join('');
+  }
 
   clearPDF() {
     this.error = this.pdfName = this.pdfSize = this.pdfToUpload = '';
@@ -78,6 +91,10 @@ export class AddCandidateComponent implements OnInit {
 
       reader.onload = (e) => {
         this.pdfToUpload = (e.target as any).result;
+        this.readPdf('./assets/sample.pdf').then(
+          (text) => console.log('PDF parsed: ' + text),
+          (reason) => console.error(reason)
+        );
       };
 
       reader.readAsDataURL(files[0]);
@@ -123,7 +140,10 @@ export class AddCandidateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private router: Router
-  ) {}
+  ) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      '//cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.js';
+  }
 
   get f() {
     return this.addCandidateForm.controls;

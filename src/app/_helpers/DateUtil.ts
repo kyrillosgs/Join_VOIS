@@ -7,7 +7,7 @@ export enum DateLocale {
   IT = 'it',
 }
 export class DateUtil {
-  constructor() { }
+  constructor() {}
 
   /**
    * @description check if the parsed date is a valid date
@@ -184,5 +184,4 @@ export class DateUtil {
     }
     return months;
   }
-
 }
