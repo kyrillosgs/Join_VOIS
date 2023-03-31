@@ -123,3 +123,8 @@ div.p-multiselect.p-component.p-multiselect-chip {
   box-shadow: 0 0 0 0.2rem #ffcece;
   border-color: #e10000;
 }
+.p-tag.p-component i {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5rem;
+}

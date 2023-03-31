@@ -92,8 +92,8 @@ export class AddCandidateComponent implements OnInit {
       reader.onload = (e) => {
         this.pdfToUpload = (e.target as any).result;
         this.readPdf('./assets/sample.pdf').then(
-          (text) => console.log('PDF parsed: ' + text),
-          (reason) => console.error(reason)
+          (text) => {},
+          (reason) => {}
         );
       };
 
@@ -170,7 +170,6 @@ export class AddCandidateComponent implements OnInit {
       this.f['Current Employer'].value,
       this.linkedinPrefix + this.f['Linkedin Profile'].value
     );
-    console.log(cand);
     this.dataService.addCandidate(cand).subscribe(
       (data) => {
         if (data.success) {
@@ -229,13 +228,13 @@ export class AddCandidateComponent implements OnInit {
         ],
       ],
       'Proposed Position': ['', [Validators.required]],
-      'Current Position': ['', [Validators.required]],
-      'Linkedin Profile': ['', [Validators.required]],
+      'Current Position': [''],
+      'Linkedin Profile': [''],
       State: ['pending_review', [Validators.required]],
       'Team Id': ['', [Validators.required]],
-      'Current Employer': ['', [Validators.required]],
-      Recruiter: ['', [Validators.required]],
-      Comments: ['', [Validators.required]],
+      'Current Employer': [''],
+      Recruiter: [''],
+      Comments: [''],
       CV: [this.pdfToUpload, [Validators.required]],
       Image: [''],
     });

@@ -111,16 +111,3 @@ export class CandidateInfoComponent implements OnInit {
     }, 100);
   }
 }
-
-(String.prototype as any).removeExtraSpaces = function () {
-  var str = this.trim();
-  var res = '';
-  var lastC;
-  for (let i in str) {
-    if (isNaN(i as any)) break;
-    if (lastC == str[i] && str[i] == ' ') continue;
-    else res += str[i];
-    lastC = str[i];
-  }
-  return res;
-};

@@ -29,6 +29,7 @@ export class MenuComponent implements OnInit {
     else if (this.selectedTeams.find((t) => t.id == e.itemValue.id))
       this.retrieveTeamCandidates(e.itemValue.id);
     else this.removeTeamCandidates(e.itemValue.id);
+    console.log(this.selectedTeams);
   }
 
   clearBoard() {
@@ -98,10 +99,18 @@ export class MenuComponent implements OnInit {
         style: { '-webkit-text-stroke': '1px #e10000' },
       },
     ];
-    this.teams = this.dataService.loggedInUser.teams;
+    this.teams = this.dataService.loggedInUser.teams as Team[];
+    if (
+      !this.teams.find((t) => t.id == this.dataService.loggedInUser.team_id?.id)
+    )
+      this.teams.push(this.dataService.loggedInUser.team_id as Team);
     this.dataService.allCandidates = [];
     if (this.selectedTeams.length == 0) {
-      this.selectedTeams.push(this.teams[0]);
+      this.selectedTeams.push(
+        this.teams.find(
+          (t) => t.id == this.dataService.loggedInUser.team_id?.id
+        ) as Team
+      );
       this.retrieveTeamCandidates(this.selectedTeams[0].id);
     } else {
       this.dataService.drawBoard();

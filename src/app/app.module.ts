@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -17,6 +17,18 @@ import { ChipModule } from 'primeng/chip';
 import { SidebarModule } from 'primeng/sidebar';
 import { ToastModule } from 'primeng/toast';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
+import { DropdownModule } from 'primeng/dropdown';
+import { KnobModule } from 'primeng/knob';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TagModule } from 'primeng/tag';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { AccordionModule } from 'primeng/accordion';
+import { MessageService } from 'primeng/api';
+import { TableModule } from 'primeng/table';
+import { CalendarModule } from 'primeng/calendar';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './features/home/home.component';
@@ -26,13 +38,6 @@ import { AddCandidateComponent } from './features/add-candidate/add-candidate.co
 import { ProfileComponent } from './features/profile/profile.component';
 import { CandidateInfoComponent } from './features/profile/candidate-info/candidate-info.component';
 import { CandidateStateComponent } from './features/profile/candidate-state/candidate-state.component';
-import { DropdownModule } from 'primeng/dropdown';
-import { KnobModule } from 'primeng/knob';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { TagModule } from 'primeng/tag';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { ConfirmationService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { TabViewModule } from 'primeng/tabview';
 import { TabPanelComponent } from './features/profile/tab-panel/tab-panel.component';
@@ -43,8 +48,7 @@ import { windowFactory } from './core/token/window-factory';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HeadersService } from './interceptors/Headers.service';
 import { ErrorhandlerService } from './interceptors/global-error-handler/errorhandler.service';
-import { MessageService } from 'primeng/api';
-import { TableModule } from 'primeng/table';
+import { PillsComponent } from './shared/pills/pills.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +62,7 @@ import { TableModule } from 'primeng/table';
     CandidateStateComponent,
     TabPanelComponent,
     LoginComponent,
+    PillsComponent,
   ],
   imports: [
     BrowserModule,
@@ -88,7 +93,10 @@ import { TableModule } from 'primeng/table';
     ToastModule,
     MultiSelectModule,
     ConfirmDialogModule,
-    TableModule
+    TableModule,
+    AccordionModule,
+    CascadeSelectModule,
+    CalendarModule,
   ],
   providers: [
     ConfirmationService,

@@ -8,6 +8,7 @@ import { State } from '../_models/enums/state';
 import { AuthService } from './auth.service';
 import { User } from '../_models/user';
 import { Team } from '../_models/team';
+import { Interview } from '../_models/interview';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,7 @@ export class DataService {
   public allCandidates: Candidate[] = [];
   public loggedInUser!: User;
   public selectedTeamsCache: Team[] = [];
+  public selectedInterview!: Interview;
 
   drawBoard(): void {
     this.allCandidates.sort((a: Candidate, b: Candidate) => {
@@ -26,27 +28,27 @@ export class DataService {
     this._kanbanModal.columns = Array.from([
       new Column(
         State.pending_review,
-        this.allCandidates.filter((c) => c.state == 'pending_review')
+        this.allCandidates.filter((c) => c.state == Object.keys(State)[0])
       ),
       new Column(
         State.phone_screening,
-        this.allCandidates.filter((c) => c.state == 'phone_screening')
+        this.allCandidates.filter((c) => c.state == Object.keys(State)[1])
       ),
       new Column(
         State.technical_interview,
-        this.allCandidates.filter((c) => c.state == 'technical_interview')
+        this.allCandidates.filter((c) => c.state == Object.keys(State)[2])
       ),
       new Column(
         State.manager_interview,
-        this.allCandidates.filter((c) => c.state == 'manager_interview')
+        this.allCandidates.filter((c) => c.state == Object.keys(State)[3])
       ),
       new Column(
         State.customer_interview,
-        this.allCandidates.filter((c) => c.state == 'customer_interview')
+        this.allCandidates.filter((c) => c.state == Object.keys(State)[4])
       ),
       new Column(
         State.hr_interview,
-        this.allCandidates.filter((c) => c.state == 'hr_interview')
+        this.allCandidates.filter((c) => c.state == Object.keys(State)[5])
       ),
     ]);
   }
@@ -133,5 +135,9 @@ export class DataService {
     return this.http.get<{ data: User }>(
       environment.apiURL + 'api/users/user/' + id
     );
+  }
+
+  getAllUsers() {
+    return this.http.get<{ data: User[] }>(environment.apiURL + 'api/users');
   }
 }
