@@ -128,3 +128,9 @@ div.p-multiselect.p-component.p-multiselect-chip {
   top: 50%;
   margin-top: -0.5rem;
 }
+p-cascadeselect[id="crecruiter"]
+  .p-cascadeselect
+  .p-element
+  div.p-overlay.p-component:has(li.p-cascadeselect-item-active) {
+  min-width: 50% !important;
+}

@@ -6,6 +6,8 @@ import { State } from 'src/app/_models/enums/state';
 import { Team } from 'src/app/_models/team';
 import { DataService } from 'src/app/_services/data.service';
 import * as pdfjsLib from 'pdfjs-dist';
+import { Position } from 'src/app/_models/position';
+import { User } from 'src/app/_models/user';
 
 @Component({
   selector: 'app-add-candidate',
@@ -13,7 +15,7 @@ import * as pdfjsLib from 'pdfjs-dist';
   styleUrls: ['./add-candidate.component.css'],
 })
 export class AddCandidateComponent implements OnInit {
-  @Input() public selectedTeams: Team[] = [];
+  public selectedTeams: Team[] = this.dataService.selectedTeamsCache;
   addCandidateForm!: FormGroup;
   protected submitted: Boolean = false;
   public pdfToUpload!: string;
@@ -28,6 +30,12 @@ export class AddCandidateComponent implements OnInit {
   pdfSize!: number | string;
   pdfName = '';
   linkedinPrefix: string = 'https://www.linkedin.com/in/';
+  allPositions: Position[] = [];
+  allUsers: {
+    tid: number | undefined;
+    tname: string | undefined;
+    users: User[];
+  }[] = [];
 
   public async readPdf(pdfUrl: string): Promise<string> {
     const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
@@ -176,6 +184,12 @@ export class AddCandidateComponent implements OnInit {
           this.error = '';
           this.loading = false;
           cand.id = data.data.id;
+          cand.proposed_position_id = this.dataService.allPositions.find(
+            (p) => p.id == data.data.proposed_position_id
+          );
+          cand.team_id = this.dataService.selectedTeamsCache.find(
+            (t) => t.id == data.data.team_id
+          );
           this.dataService.allCandidates.push(cand);
           this.dataService.drawBoard();
           this.resetAddCandidateForm();
@@ -198,6 +212,12 @@ export class AddCandidateComponent implements OnInit {
     this.addCandidateForm.reset();
     this.submit = false;
     this.clearPDF();
+  }
+
+  changeTeam(e: any) {
+    this.allPositions = this.dataService.allPositions.filter(
+      (p) => p.team_id == e.value
+    );
   }
 
   async ngOnInit(): Promise<void> {
@@ -230,7 +250,7 @@ export class AddCandidateComponent implements OnInit {
       'Proposed Position': ['', [Validators.required]],
       'Current Position': [''],
       'Linkedin Profile': [''],
-      State: ['pending_review', [Validators.required]],
+      State: ['pending_review'],
       'Team Id': ['', [Validators.required]],
       'Current Employer': [''],
       Recruiter: [''],
@@ -238,5 +258,37 @@ export class AddCandidateComponent implements OnInit {
       CV: [this.pdfToUpload, [Validators.required]],
       Image: [''],
     });
+    this.f['State'].disable();
+    this.dataService.getAllUsers().subscribe(
+      (data) => {
+        data.data
+          .sort((a, b) => (a.team_id?.id as any) - (b.team_id?.id as any))
+          .forEach((u) => {
+            if (!this.allUsers.find((t) => t.tid == u.team_id?.id))
+              this.allUsers.push({
+                tid: u.team_id?.id,
+                tname: u.team_id?.name,
+                users: [],
+              });
+            this.allUsers.find((t) => t.tid == u.team_id?.id)?.users.push(u);
+          });
+      },
+      (error) => {}
+    );
+    // this.dataService.allPositions
+    //   .sort((a, b) => a.team_id - b.team_id)
+    //   .forEach((p) => {
+    //     if (
+    //       !this.allPositions.find((t) => t.tid == p.team_id) &&
+    //       this.selectedTeams.find((t) => p.team_id == t.id)
+    //     )
+    //       this.allPositions.push({
+    //         tid: p.team_id,
+    //         tname: this.selectedTeams.find((t) => p.team_id == t.id)?.name,
+    //         positions: [],
+    //       });
+
+    //     this.allPositions.find((t) => t.tid == p.team_id)?.positions.push(p);
+    //   });
   }
 }

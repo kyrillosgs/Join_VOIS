@@ -41,15 +41,14 @@ export class TabPanelComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       key: 'removeAssignee',
       accept: () => {
-        // this.dataService
-        //   .removeTagFromCandidate(
-        //     this.candidate.id,
-        //     (this.candidate.tags as any)[index]
-        //   )
-        //   .subscribe((data) => {
-        //     this.candidate.tags?.splice(index, 1);
-        //   });
-        this.dataService.selectedInterview.assignees.splice(index, 1);
+        this.dataService
+          .removeAssigneeFromInterview(
+            this.dataService.selectedInterview.id,
+            index
+          )
+          .subscribe((data) => {
+            this.dataService.selectedInterview.assignees.splice(index, 1);
+          });
       },
       reject: () => {
         //reject action
@@ -69,12 +68,14 @@ export class TabPanelComponent implements OnInit {
         (a) => a.id == assignee.id
       )
     ) {
-      // this.dataService
-      //   .addTagToCandidate(this.candidate.id, tag)
-      //   .subscribe((data) => {
-      //     this.candidate.tags?.push(tag);
-      //   });
-      this.dataService.selectedInterview.assignees.push(assignee);
+      this.dataService
+        .addAssigneeToInterview(
+          this.dataService.selectedInterview.id,
+          assignee.id
+        )
+        .subscribe((data) => {
+          this.dataService.selectedInterview.assignees.push(assignee);
+        });
     }
     this.addingTag = false;
     this.newTag = '';
@@ -96,18 +97,20 @@ export class TabPanelComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.topics = this.dataService.selectedInterview.topics;
-    this.questions = this.dataService.selectedInterview.questions;
-    this.assignees = this.dataService.selectedInterview.assignees;
-    for (let i in Stage)
-      if (
-        isNaN(i as any) &&
-        this.interviews.find((ii) => (ii.type as any) == i)
-      )
-        this.allStages.push({
-          optionLabel: (i.replaceAll('_', ' ') as any).capitalizeEachWord(),
-          optionValue: i,
-        });
+    if (this.dataService.selectedInterview) {
+      this.topics = this.dataService.selectedInterview.topics;
+      this.questions = this.dataService.selectedInterview.questions;
+      this.assignees = this.dataService.selectedInterview.assignees;
+      for (let i in Stage)
+        if (
+          isNaN(i as any) &&
+          this.interviews.find((ii) => (ii.type as any) == i)
+        )
+          this.allStages.push({
+            optionLabel: (i.replaceAll('_', ' ') as any).capitalizeEachWord(),
+            optionValue: i,
+          });
+    }
     this.dataService.getAllUsers().subscribe(
       (data) => {
         data.data
@@ -144,7 +147,7 @@ export class TabPanelComponent implements OnInit {
   }
 
   getTopicQuestions(topic_id: number) {
-    return this.questions.filter((q) => q.topic_id == topic_id);
+    return this.questions.filter((q) => q.topics_id == topic_id);
   }
 
   //scrollableTabs: any[] = Array.from({ length: 50 }, (_, i) => ({ title: `Tab ${i + 1}`, content: `Tab ${i + 1} Content` }));

@@ -6,14 +6,29 @@
       imgSrc = '../../../../assets/images/candidate image placeholder.jpg'
     "
     [alt]="candidate.name + ' photo'"
+    style="height: 18rem"
   />
   <div class="card-body">
     <h5 class="card-title text-center fs-4 fw-semibold">
       {{ candidate.name }}
     </h5>
     <div class="card-text">
-      <p class="text-black text-center fw-lighter">
+      <p
+        class="text-black text-center fw-lighter"
+        *ngIf="candidate.current_position || candidate.current_employer"
+      >
         {{ candidate.current_position }}
+        <span *ngIf="candidate.current_employer">
+          <span
+            *ngIf="
+              !candidate.current_position && candidate.current_employer;
+              else elseTemplate
+            "
+            >Works at
+          </span>
+          <ng-template #elseTemplate> at </ng-template>
+          {{ candidate.current_employer }}
+        </span>
       </p>
     </div>
   </div>
@@ -34,7 +49,7 @@
           <i class="pi pi-briefcase fs-4" pTooltip="Applied Position"></i>
         </div>
         <div class="col-lg-10 col-sm-12">
-          {{ candidate.proposed_position }}
+          {{ candidate.proposed_position_id?.name }}
         </div>
       </div>
     </li>
@@ -44,6 +59,16 @@
           <i class="pi pi-phone fs-4" pTooltip="Phone"></i>
         </div>
         <div class="col-lg-10 col-md-12">{{ candidate.phone }}</div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-lg-2 col-md-12 fw-semibold m-auto">
+          <i class="pi pi-user fs-4" pTooltip="Recruiter"></i>
+        </div>
+        <div class="col-lg-10 col-md-12">
+          {{ candidate.recruiter_id?.name }}
+        </div>
       </div>
     </li>
     <li class="list-group-item">
@@ -72,6 +97,16 @@
           <a routerLink="." skipLocationChange (click)="downloadCV()"
             >Download</a
           >
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-lg-2 col-md-12 fw-semibold m-auto">
+          <i class="pi pi-comments fs-4" pTooltip="Comments"></i>
+        </div>
+        <div class="col-lg-10 col-md-12">
+          {{ candidate.comment }}
         </div>
       </div>
     </li>

@@ -9,6 +9,7 @@ import { AuthService } from './auth.service';
 import { User } from '../_models/user';
 import { Team } from '../_models/team';
 import { Interview } from '../_models/interview';
+import { Position } from '../_models/position';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class DataService {
   public loggedInUser!: User;
   public selectedTeamsCache: Team[] = [];
   public selectedInterview!: Interview;
+  public allPositions: Position[] = [];
 
   drawBoard(): void {
     this.allCandidates.sort((a: Candidate, b: Candidate) => {
@@ -54,7 +56,10 @@ export class DataService {
   }
 
   constructor(private http: HttpClient, private authService: AuthService) {
-    this.loggedInUser = authService.getTokenDataAfterDecode().user;
+    this.loggedInUser = authService.getTokenDataAfterDecode()?.user;
+    this.getAllPositions().subscribe((data) => {
+      this.allPositions = data;
+    });
   }
 
   private stages: string[] = [
@@ -73,6 +78,10 @@ export class DataService {
     return this.http.get<{ data: Candidate[] }>(
       environment.apiURL + 'api/candidates/get_candidates_by_team/' + id
     );
+  }
+
+  public getAllTeams() {
+    return this.http.get<Team[]>(environment.apiURL + 'api/teams');
   }
 
   public getCandidate(id: number) {
@@ -139,5 +148,29 @@ export class DataService {
 
   getAllUsers() {
     return this.http.get<{ data: User[] }>(environment.apiURL + 'api/users');
+  }
+
+  getAllPositions() {
+    return this.http.get<Position[]>(environment.apiURL + 'api/positions');
+  }
+
+  getCandidateInterviews(id: number) {
+    return this.http.get<{ data: Interview[] }>(
+      environment.apiURL + 'api/interviews/get_interview_to_candidate/' + id
+    );
+  }
+
+  addAssigneeToInterview(interview_id: number, user_id: number) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/interviews/add_assignee_to_interview',
+      { interview_id, user_id }
+    );
+  }
+
+  removeAssigneeFromInterview(interview_id: number, user_id: number) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/interviews/delete_assignee_to_interview',
+      { interview_id, user_id }
+    );
   }
 }

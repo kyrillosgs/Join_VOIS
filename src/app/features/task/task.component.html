@@ -1,12 +1,16 @@
 <div class="container is-full">
   <div class="columns">
     <div class="column is-6 wrap">
-      <a [routerLink]="['/candidates']" [state]="{ id: candidate.id }">{{
-        candidate.name
-      }}</a>
+      <a
+        [routerLink]="['/candidates']"
+        [state]="{ id: candidate.id }"
+        class="fw-bold fs-5"
+        >{{ candidate.name }}</a
+      >
+      <p class="fs-6 fst-italic">{{ candidate.current_position }}</p>
     </div>
     <div class="column is-6 has-text-right wrap">
-      {{ candidate.proposed_position }}
+      {{ candidate.proposed_position_id?.name }}
     </div>
   </div>
   <div class="columns">

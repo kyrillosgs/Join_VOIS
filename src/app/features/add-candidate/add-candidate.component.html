@@ -79,48 +79,50 @@
       </div>
     </div>
   </div>
+  <div class="col-6">
+    <label class="form-label" for="cteamid">Team:</label>
+    <p-dropdown
+      formControlName="Team Id"
+      [options]="selectedTeams"
+      (onChange)="changeTeam($event)"
+      optionLabel="name"
+      optionValue="id"
+      id="cteamid"
+      [ngClass]="{
+        'is-invalid': f['Team Id'].errors && submitted,
+        'is-valid': !f['Team Id'].errors && submitted
+      }"
+      styleClass="form-control"
+      placeholder="Candidate Team"
+    ></p-dropdown>
+    <div *ngIf="f['Team Id'].errors && submitted" class="invalid-feedback">
+      <div *ngIf="f['Team Id'].errors['required']">
+        You must specify the team of the candidate
+      </div>
+    </div>
+  </div>
   <div class="col-md-12 col-lg-6">
     <label class="form-label" for="cproposedposition">Proposed Position:</label>
-    <input
-      type="text"
-      id="cproposedposition"
-      pInputText
-      class="form-control"
+    <p-dropdown
+      [disabled]="f['Team Id'].value ? false : true"
+      [options]="allPositions"
+      optionLabel="name"
+      optionValue="id"
+      placeholder="Candidate Proposed Position"
+      styleClass="form-control"
       formControlName="Proposed Position"
+      id="cproposedposition"
       [ngClass]="{
         'is-invalid': f['Proposed Position'].errors && submitted,
         'is-valid': !f['Proposed Position'].errors && submitted
       }"
-      value=""
-      placeholder="Candidate Proposed Position"
-    />
+    ></p-dropdown>
     <div
       *ngIf="f['Proposed Position'].errors && submitted"
       class="invalid-feedback"
     >
       <div *ngIf="f['Proposed Position'].errors['required']">
         Candidate proposed position is required
-      </div>
-    </div>
-  </div>
-  <div class="col-md-12 col-lg-6">
-    <label class="form-label" for="crecruiter">Recruiter:</label>
-    <input
-      type="text"
-      id="crecruiter"
-      pInputText
-      class="form-control"
-      formControlName="Recruiter"
-      [ngClass]="{
-        'is-invalid': f['Recruiter'].errors && submitted,
-        'is-valid': !f['Recruiter'].errors && submitted
-      }"
-      value=""
-      placeholder="Candidate Recruiter Name"
-    />
-    <div *ngIf="f['Recruiter'].errors && submitted" class="invalid-feedback">
-      <div *ngIf="f['Recruiter'].errors['required']">
-        Candidate recruiter is required
       </div>
     </div>
   </div>
@@ -222,24 +224,40 @@
       </div>
     </div>
   </div>
-  <div class="col-6">
-    <label class="form-label" for="cteamid">Team:</label>
-    <p-dropdown
-      formControlName="Team Id"
-      [options]="selectedTeams"
+  <div class="col-md-12 col-lg-6">
+    <label class="form-label" for="crecruiter">Recruiter:</label>
+    <p-cascadeSelect
+      [options]="allUsers"
       optionLabel="name"
       optionValue="id"
-      id="cteamid"
-      [ngClass]="{
-        'is-invalid': f['Team Id'].errors && submitted,
-        'is-valid': !f['Team Id'].errors && submitted
-      }"
+      optionGroupLabel="tname"
+      [optionGroupChildren]="['users']"
       styleClass="form-control"
-      placeholder="Candidate Team"
-    ></p-dropdown>
-    <div *ngIf="f['Team Id'].errors && submitted" class="invalid-feedback">
-      <div *ngIf="f['Team Id'].errors['required']">
-        You must specify the team of the candidate
+      formControlName="Recruiter"
+      id="crecruiter"
+      [ngClass]="{
+        'is-invalid': f['Recruiter'].errors && submitted,
+        'is-valid': !f['Recruiter'].errors && submitted
+      }"
+      value=""
+      placeholder="Candidate Recruiter Name"
+    ></p-cascadeSelect>
+    <!-- <input
+      type="text"
+      id="crecruiter"
+      pInputText
+      class="form-control"
+      formControlName="Recruiter"
+      [ngClass]="{
+        'is-invalid': f['Recruiter'].errors && submitted,
+        'is-valid': !f['Recruiter'].errors && submitted
+      }"
+      value=""
+      placeholder="Candidate Recruiter Name"
+    /> -->
+    <div *ngIf="f['Recruiter'].errors && submitted" class="invalid-feedback">
+      <div *ngIf="f['Recruiter'].errors['required']">
+        Candidate recruiter is required
       </div>
     </div>
   </div>

@@ -7,6 +7,7 @@ import {
   MessageService,
 } from 'primeng/api';
 import { LocalStorageKeys } from 'src/app/_models/enums/local-storage-keys.enum';
+import { Role } from 'src/app/_models/enums/role';
 import { Team } from 'src/app/_models/team';
 import { AuthService } from 'src/app/_services/auth.service';
 import { DataService } from 'src/app/_services/data.service';
@@ -21,15 +22,22 @@ export class MenuComponent implements OnInit {
   protected items!: MenuItem[];
   loading: boolean = true;
   teams: Team[] = [];
-  selectedTeams: Team[] = this.dataService.selectedTeamsCache;
+  selectedTeams!: Team[];
   //showHeader:boolean=false;
 
   changeTeams(e: any) {
     if (!e.itemValue && e.value.length == 0) this.clearBoard();
-    else if (this.selectedTeams.find((t) => t.id == e.itemValue.id))
+    else if (!e.itemValue)
+      e.value.forEach((t: Team) => {
+        if (!this.selectedTeams.find((tt) => t.id == tt.id))
+          this.retrieveTeamCandidates(t.id);
+      });
+    else if (
+      this.dataService.selectedTeamsCache.find((t) => t.id == e.itemValue.id)
+    )
       this.retrieveTeamCandidates(e.itemValue.id);
     else this.removeTeamCandidates(e.itemValue.id);
-    console.log(this.selectedTeams);
+    this.selectedTeams = Array.from(this.dataService.selectedTeamsCache);
   }
 
   clearBoard() {
@@ -48,7 +56,7 @@ export class MenuComponent implements OnInit {
   async removeTeamCandidates(id: number) {
     let candidates = this.dataService.allCandidates;
     for (let c = 0; c < candidates.length; c++) {
-      if (candidates[c].team_id == id) {
+      if (candidates[c].team_id?.id == id) {
         this.dataService.allCandidates.splice(c, 1);
         c--;
       }
@@ -61,7 +69,7 @@ export class MenuComponent implements OnInit {
     private messageService: MessageService,
     private authService: AuthService,
     private router: Router,
-    private dataService: DataService,
+    protected dataService: DataService,
     private localStorageService: LocalStorageService
   ) {}
   ngOnInit() {
@@ -99,25 +107,34 @@ export class MenuComponent implements OnInit {
         style: { '-webkit-text-stroke': '1px #e10000' },
       },
     ];
-    this.teams = this.dataService.loggedInUser.teams as Team[];
+    if ((this.dataService.loggedInUser.role as any) == Role[1])
+      this.teams = this.dataService.loggedInUser.teams as Team[];
+    else if ((this.dataService.loggedInUser.role as any) == Role[2])
+      this.dataService.getAllTeams().subscribe(
+        (data) => {
+          this.teams = data;
+        },
+        (error) => {}
+      );
     if (
       !this.teams.find((t) => t.id == this.dataService.loggedInUser.team_id?.id)
     )
       this.teams.push(this.dataService.loggedInUser.team_id as Team);
     this.dataService.allCandidates = [];
-    if (this.selectedTeams.length == 0) {
-      this.selectedTeams.push(
+    if (this.dataService.selectedTeamsCache.length == 0) {
+      this.dataService.selectedTeamsCache.push(
         this.teams.find(
           (t) => t.id == this.dataService.loggedInUser.team_id?.id
         ) as Team
       );
-      this.retrieveTeamCandidates(this.selectedTeams[0].id);
+      this.retrieveTeamCandidates(this.dataService.selectedTeamsCache[0].id);
     } else {
       this.dataService.drawBoard();
-      this.selectedTeams.forEach((t) => {
+      this.dataService.selectedTeamsCache.forEach((t) => {
         this.retrieveTeamCandidates(t.id);
       });
     }
+    this.selectedTeams = Array.from(this.dataService.selectedTeamsCache);
   }
 
   showLogOut(): void {
@@ -128,6 +145,10 @@ export class MenuComponent implements OnInit {
       key: 'logout',
       accept: () => {
         this.authService.signOut();
+        (this.dataService.loggedInUser as any) = undefined;
+        (this.dataService.allCandidates as any) = [];
+        (this.dataService.selectedInterview as any) = undefined;
+        (this.dataService.selectedTeamsCache as any) = [];
         this.router.navigate(['/login']);
         //this.messageService.add({severity:'error', summary: 'Error', detail: 'Message Content',life: 2000});
       },

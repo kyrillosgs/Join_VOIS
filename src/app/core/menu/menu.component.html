@@ -7,7 +7,7 @@
       <p-multiSelect
         id="ms-teams"
         [options]="teams"
-        [(ngModel)]="selectedTeams"
+        [(ngModel)]="dataService.selectedTeamsCache"
         optionLabel="name"
         display="chip"
         (onChange)="changeTeams($event)"

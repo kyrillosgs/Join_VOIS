@@ -20,7 +20,7 @@
         <app-tab-panel
           [interviews]="interviews"
           [candidate]="candidate"
-          *ngIf="candidate"
+          *ngIf="candidate && dataService.selectedInterview"
         ></app-tab-panel>
       </div>
     </div>

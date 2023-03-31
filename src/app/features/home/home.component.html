@@ -1,6 +1,6 @@
 <div class="board">
   <div class="board-header"></div>
-  <div class="board-wrapper" *ngIf="selectedTeams.length">
+  <div class="board-wrapper" *ngIf="dataService.selectedTeamsCache.length">
     <div class="board-columns" cdkDropListGroup>
       <div class="board-column" *ngFor="let column of Board.columns">
         <div class="columns column-title">
@@ -20,9 +20,7 @@
               *ngIf="column.name == 'Pending Review'"
             >
               <ng-template pTemplate="header">New Candidate</ng-template>
-              <app-add-candidate
-                [selectedTeams]="selectedTeams"
-              ></app-add-candidate>
+              <app-add-candidate></app-add-candidate>
               <ng-template pTemplate="footer">
                 <button
                   pButton

@@ -25,7 +25,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   public destroyed = new Subject<any>();
   loading: boolean = true;
   teams: Team[] = [];
-  selectedTeams: Team[] = this.dataService.selectedTeamsCache;
 
   public addCandidate() {
     this.addCandidateComponent.submit = true;
@@ -36,7 +35,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.addCandidateComponent.resetAddCandidateForm();
   }
 
-  constructor(private dataService: DataService, private router: Router) {}
+  constructor(protected dataService: DataService, private router: Router) {}
 
   public get Board(): Board {
     return this.dataService.getData();
@@ -59,7 +58,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
   ngOnDestroy(): void {
-    this.dataService.selectedTeamsCache = this.selectedTeams;
     this.destroyed.next(1);
     this.destroyed.complete();
   }
