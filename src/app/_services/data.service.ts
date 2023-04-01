@@ -173,4 +173,11 @@ export class DataService {
       { interview_id, user_id }
     );
   }
+
+  editInterview(interview_id: number, update: Object) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/interviews/edit/' + interview_id,
+      update
+    );
+  }
 }

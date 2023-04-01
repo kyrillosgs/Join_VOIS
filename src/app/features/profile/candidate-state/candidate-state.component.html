@@ -50,7 +50,7 @@
         pButton
         pRipple
         type="button"
-        (click)="moveToNextStage()"
+        (click)="confirmSuccess()"
         [label]="successLabel"
         [disabled]="successIsDisabled"
         class="p-button-raised p-button-success m-0"
@@ -61,76 +61,13 @@
         pButton
         pRipple
         type="button"
+        (click)="confirmReject()"
+        [disabled]="successIsDisabled"
         label="Reject"
         class="p-button-raised p-button-danger m-0"
       ></button>
     </div>
-
-    <!-- <div
-      class="p-grid p-formgrid p-text-center col-sm-12 col-md-6 col-lg-4 p-3"
-    >
-      <div class="p-field p-col-12 p-md-3 p-text-center">
-        <h5 class="p-mt-3">Score:</h5>
-        <p-knob
-          [ngModel]="dataService.selectedInterview.score"
-          valueTemplate="{value}%"
-        ></p-knob>
-      </div>
-      <div class="p-field p-col-12 p-md-3 p-text-center">
-        <h5 class="p-mt-3">Result:</h5>
-        <p-button
-          [label]="interviewResult"
-          [styleClass]="'p-button-rounded p-button-' + resultClass"
-          [disabled]="true"
-        ></p-button>
-      </div>
-    </div>
-
-    <div
-      class="p-grid p-formgrid p-text-center col-sm-12 col-md-6 col-lg-4 p-4"
-    >
-      <div class="p-field p-col-12 p-md-3 p-text-center">
-        <h5 class="p-mt-3">Stage:</h5>
-        <p-dropdown
-          [options]="allStages"
-          [(ngModel)]="candidate.state"
-          optionLabel="optionLabel"
-          optionValue="optionValue"
-          [disabled]="true"
-        ></p-dropdown>
-      </div>
-      <div class="p-field p-col-12 p-md-3 p-text-center">
-        <h5 class="p-mt-3">Date:</h5>
-        <p-calendar
-          [(ngModel)]="dataService.selectedInterview.date"
-          [showTime]="true"
-          [touchUI]="true"
-          [readonlyInput]="true"
-        ></p-calendar>
-      </div>
-    </div>
-
-    <div
-      class="p-grid p-formgrid p-text-center col-sm-12 col-md-12 col-lg-4 p-4"
-    >
-      <div class="p-field p-col-12 p-md-3 p-text-center">
-        <button
-          pButton
-          pRipple
-          type="button"
-          label="Move to the next Stage"
-          class="p-button-raised p-button-success m-0"
-        ></button>
-        <div class="p-field p-col-12 p-md-3 p-text-center">
-          <button
-            pButton
-            pRipple
-            type="button"
-            label="Reject"
-            class="p-button-raised p-button-danger m-0"
-          ></button>
-        </div>
-      </div>
-    </div> -->
   </div>
 </div>
+
+<p-confirmDialog [key]="'interview'"></p-confirmDialog>

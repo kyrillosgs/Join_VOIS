@@ -8,6 +8,7 @@ import { Interview } from 'src/app/_models/interview';
 import { Result } from 'src/app/_models/enums/result';
 import { ProfileComponent } from '../profile.component';
 import { Stage } from 'src/app/_models/enums/stage';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-candidate-state',
@@ -20,16 +21,74 @@ export class CandidateStateComponent implements OnInit {
   allStages: any[] = [];
 
   moveToNextStage() {
-    this.dataService
-      .editCandidate(this.candidate.id, {
-        state:
-          Object.keys(State)[
-            Object.keys(State).indexOf(this.candidate.state as any) + 1
-          ],
-      })
-      .subscribe((data) => {
-        this.profileComponent.retrieveInterviews();
+    if ((this.candidate.state as any) == 'hr_interview')
+      this.editInterview(this.currentStageInterview.id, {
+        result: (Result as any)[1],
       });
+    else
+      this.dataService
+        .editCandidate(this.candidate.id, {
+          state:
+            Object.keys(State)[
+              Object.keys(State).indexOf(this.candidate.state as any) + 1
+            ],
+        })
+        .subscribe((data) => {
+          this.profileComponent.retrieveInterviews();
+        });
+  }
+
+  confirmSuccess() {
+    this.confirmationService.confirm({
+      message:
+        (this.candidate.state as any) != 'hr_interview'
+          ? 'Move "' +
+            this.candidate.name +
+            `" to stage '` +
+            (
+              Object.keys(State)[
+                Object.keys(State).indexOf(this.candidate.state as any) + 1
+              ].replaceAll('_', ' ') as any
+            ).capitalizeEachWord() +
+            "'?"
+          : 'Accept candidate "' + this.candidate.name + '"?',
+      header: 'Proceed with candidate',
+      icon: 'pi pi-check-square text-success',
+      key: 'interview',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-secondary',
+      accept: () => {
+        this.moveToNextStage();
+      },
+      reject: () => {},
+    });
+  }
+
+  confirmReject() {
+    this.confirmationService.confirm({
+      message: 'Reject candidate "' + this.candidate.name + '"?',
+      header: 'End candidate process',
+      icon: 'pi pi-exclamation-circle text-danger',
+      key: 'interview',
+      acceptButtonStyleClass: 'p-button-danger',
+      rejectButtonStyleClass: 'p-button-secondary',
+      accept: () => {
+        this.editInterview(this.currentStageInterview.id, { result: 'fail' });
+      },
+      reject: () => {},
+    });
+  }
+
+  editInterview(id: number, update: Object) {
+    this.dataService.editInterview(id, update).subscribe((data) => {
+      this.profileComponent.retrieveInterviews();
+    });
+  }
+
+  protected get currentStageInterview(): Interview {
+    return this.interviews.find(
+      (i) => i.type == (this.candidate.state as any)
+    ) as Interview;
   }
 
   protected get successLabel() {
@@ -63,7 +122,8 @@ export class CandidateStateComponent implements OnInit {
 
   constructor(
     public dataService: DataService,
-    private profileComponent: ProfileComponent
+    private profileComponent: ProfileComponent,
+    private confirmationService: ConfirmationService
   ) {
     for (let i in State)
       this.allStages.push({ optionLabel: (State as any)[i], optionValue: i });
