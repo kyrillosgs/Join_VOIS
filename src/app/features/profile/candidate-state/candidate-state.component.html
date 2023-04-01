@@ -1,73 +1,172 @@
 <div class="text-center card">
   <div class="row p-5 align-middle">
+    <div class="col-md-8 col-sm-12">
+      <div class="row">
+        <div
+          class="col-lg-4 order-first col-md-6"
+          *ngIf="dataService.selectedInterview"
+        >
+          <h5 class="p-mt-3">Score:</h5>
+          <p-knob
+            id="score"
+            [valueColor]="interviewScore >= 50 ? '#34A835' : '#e91224'"
+            [(ngModel)]="interviewScore"
+            valueTemplate="{value}%"
+            [size]="70"
+            (onChange)="confirmScoreChange($event)"
+          ></p-knob>
+        </div>
+        <div
+          class="col-lg-4 order-lg-4 col-md-6"
+          *ngIf="dataService.selectedInterview"
+        >
+          <h5 class="p-mt-3">Result:</h5>
+          <p-button
+            [label]="interviewResult"
+            [styleClass]="'p-button-rounded p-button-' + resultClass"
+            [disabled]="true"
+          ></p-button>
+        </div>
+        <div class="col-lg-4 order-lg-2 col-md-6">
+          <h5 class="p-mt-3">Stage:</h5>
+          <p-dropdown
+            [options]="allStages"
+            [(ngModel)]="candidate.state"
+            optionLabel="optionLabel"
+            optionValue="optionValue"
+            [disabled]="true"
+          ></p-dropdown>
+        </div>
+        <div
+          class="col-lg-4 order-lg-5 col-md-6"
+          *ngIf="dataService.selectedInterview"
+        >
+          <h5 class="p-mt-3">Date:</h5>
+          <div class="p-inputgroup">
+            <input
+              type="text"
+              pInputText
+              [disabled]="true"
+              [(ngModel)]="interviewDate"
+              [value]="interviewDate.toUTCString()"
+            />
+            <button
+              type="button"
+              pButton
+              icon="pi pi-pencil"
+              class="p-button-outlined p-button-secondary"
+              style="max-width: 30%; text-align: end"
+              (click)="showCalendar()"
+              *ngIf="!editingData.date"
+            ></button>
+            <button
+              type="button"
+              pButton
+              icon="pi pi-check"
+              class="p-button-success p-button-outlined"
+              style="max-width: 30%; text-align: end"
+              (click)="setInterviewDate()"
+              *ngIf="editingData.date"
+            ></button>
+            <button
+              type="button"
+              pButton
+              icon="pi pi-times"
+              class="p-button-danger p-button-outlined"
+              style="max-width: 30%; text-align: end"
+              (click)="cancelDateChange()"
+              *ngIf="editingData.date"
+            ></button>
+          </div>
+        </div>
+        <div class="col-lg-4 order-lg-3 col-md-6 mt-6">
+          <button
+            pButton
+            pRipple
+            type="button"
+            (click)="confirmSuccess()"
+            [label]="successLabel"
+            [disabled]="successIsDisabled"
+            class="p-button-raised p-button-success m-0"
+          ></button>
+        </div>
+        <div class="col-lg-4 order-last col-md-6 mt-6">
+          <button
+            pButton
+            pRipple
+            type="button"
+            (click)="confirmReject()"
+            [disabled]="successIsDisabled"
+            label="Reject"
+            class="p-button-raised p-button-danger m-0"
+          ></button>
+        </div>
+      </div>
+    </div>
+
     <div
-      class="col-lg-4 order-first col-md-6"
+      class="col-md-4 col-sm-12 mt-md-2 mt-sm-5 text-end"
       *ngIf="dataService.selectedInterview"
     >
-      <h5 class="p-mt-3">Score:</h5>
-      <p-knob
-        [ngModel]="dataService.selectedInterview.score"
-        valueTemplate="{value}%"
-        [size]="70"
-      ></p-knob>
-    </div>
-    <div
-      class="col-lg-4 order-lg-4 col-md-6"
-      *ngIf="dataService.selectedInterview"
-    >
-      <h5 class="p-mt-3">Result:</h5>
-      <p-button
-        [label]="interviewResult"
-        [styleClass]="'p-button-rounded p-button-' + resultClass"
-        [disabled]="true"
-      ></p-button>
-    </div>
-    <div class="col-lg-4 order-lg-2 col-md-6">
-      <h5 class="p-mt-3">Stage:</h5>
-      <p-dropdown
-        [options]="allStages"
-        [(ngModel)]="candidate.state"
-        optionLabel="optionLabel"
-        optionValue="optionValue"
-        [disabled]="true"
-      ></p-dropdown>
-    </div>
-    <div
-      class="col-lg-4 order-lg-5 col-md-6"
-      *ngIf="dataService.selectedInterview"
-    >
-      <h5 class="p-mt-3">Date:</h5>
-      <p-calendar
-        [(ngModel)]="dataService.selectedInterview.date"
-        [showTime]="true"
-        [touchUI]="true"
-        [style]="{ width: '100%' }"
-        [readonlyInput]="true"
-      ></p-calendar>
-    </div>
-    <div class="col-lg-4 order-lg-3 col-md-6 mt-6">
-      <button
-        pButton
-        pRipple
-        type="button"
-        (click)="confirmSuccess()"
-        [label]="successLabel"
-        [disabled]="successIsDisabled"
-        class="p-button-raised p-button-success m-0"
-      ></button>
-    </div>
-    <div class="col-lg-4 order-last col-md-6 mt-6">
-      <button
-        pButton
-        pRipple
-        type="button"
-        (click)="confirmReject()"
-        [disabled]="successIsDisabled"
-        label="Reject"
-        class="p-button-raised p-button-danger m-0"
-      ></button>
+      <span class="p-float-label">
+        <textarea
+          id="interview-notes"
+          style="width: 100%"
+          rows="8"
+          [(ngModel)]="interviewNotes"
+          [disabled]="!editingData.notes"
+          pInputTextarea
+        ></textarea>
+        <label for="interview-notes">{{ interviewName }} Notes:</label>
+        <p-button
+          icon="pi pi-pencil"
+          *ngIf="!editingData.notes"
+          styleClass="p-button-sm p-button-rounded p-button-text p-button-raised"
+          [style]="{
+            position: 'absolute',
+            bottom: '7%',
+            left: '3%'
+          }"
+          (click)="editingData.notes = true"
+        ></p-button>
+        <p-button
+          icon="pi pi-times"
+          *ngIf="editingData.notes"
+          styleClass="p-button-sm p-button-rounded p-button-text p-button-raised p-button-danger"
+          [style]="{
+            position: 'absolute',
+            bottom: '7%',
+            left: '3%'
+          }"
+          (click)="
+            editingData.notes = false;
+            interviewNotes = dataService.selectedInterview.notes
+          "
+        ></p-button>
+        <p-button
+          icon="pi pi-check"
+          *ngIf="editingData.notes"
+          styleClass="p-button-sm p-button-rounded p-button-text p-button-raised p-button-success"
+          [style]="{
+            position: 'absolute',
+            bottom: '7%',
+            left: '23%'
+          }"
+          (click)="updateNotes()"
+        ></p-button>
+      </span>
     </div>
   </div>
 </div>
 
 <p-confirmDialog [key]="'interview'"></p-confirmDialog>
+<p-confirmPopup [key]="'score'"></p-confirmPopup>
+
+<p-calendar
+  [(ngModel)]="interviewDate"
+  [showTime]="true"
+  [touchUI]="true"
+  (onShow)="onShowCalendar()"
+  (onClose)="onDateChanged()"
+  style="visibility: hidden; position: absolute"
+></p-calendar>

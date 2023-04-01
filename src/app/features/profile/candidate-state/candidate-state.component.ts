@@ -19,6 +19,77 @@ export class CandidateStateComponent implements OnInit {
   @Input() candidate!: Candidate;
   @Input() interviews!: Interview[];
   allStages: any[] = [];
+  interviewDate!: Date;
+  editingData: { date: boolean; notes: boolean } = {
+    date: false,
+    notes: false,
+  };
+  interviewScore!: number;
+  interviewNotes: string | undefined;
+
+  updateNotes() {
+    this.editInterview(this.dataService.selectedInterview.id, {
+      notes: this.interviewNotes,
+    });
+    this.editingData.notes = false;
+  }
+
+  confirmScoreChange(newScore: number) {
+    if (newScore != this.dataService.selectedInterview.score)
+      this.confirmationService.confirm({
+        message: 'Update interview score?',
+        target: document.querySelector('#score') as any,
+        icon: 'pi pi-exclamation-triangle text-warning',
+        key: 'score',
+        acceptButtonStyleClass: 'p-button-success',
+        rejectButtonStyleClass: 'p-button-secondary',
+        accept: () => {
+          this.editInterview(this.dataService.selectedInterview.id, {
+            score: newScore,
+          });
+        },
+        reject: () => {
+          this.interviewScore = this.dataService.selectedInterview
+            .score as number;
+        },
+      });
+  }
+
+  cancelDateChange() {
+    this.editingData.date = false;
+    this.interviewDate = new Date(this.dataService.selectedInterview.date);
+  }
+
+  setInterviewDate() {
+    this.editInterview(this.dataService.selectedInterview.id, {
+      date: this.interviewDate.toISOString().replace('T', ' ').replace('Z', ''),
+    });
+    this.editingData.date = false;
+  }
+
+  onDateChanged() {
+    if (
+      this.interviewDate &&
+      (this.interviewDate as any) -
+        (new Date(this.dataService.selectedInterview.date) as any) !=
+        0
+    )
+      this.editingData.date = true;
+  }
+
+  onShowCalendar() {
+    (
+      document.querySelector(
+        '.ng-trigger.ng-trigger-overlayAnimation.p-datepicker.p-component.p-datepicker-touch-ui.ng-star-inserted'
+      ) as any
+    ).style.visibility = 'visible';
+  }
+
+  showCalendar() {
+    (
+      document.querySelector('p-calendar') as any
+    ).children[0].children[0].click();
+  }
 
   moveToNextStage() {
     if ((this.candidate.state as any) == 'hr_interview')
@@ -85,6 +156,12 @@ export class CandidateStateComponent implements OnInit {
     });
   }
 
+  protected get interviewName(): string {
+    return (this.dataService.selectedInterview.type as any)
+      .replaceAll('_', ' ')
+      .capitalizeEachWord();
+  }
+
   protected get currentStageInterview(): Interview {
     return this.interviews.find(
       (i) => i.type == (this.candidate.state as any)
@@ -94,7 +171,7 @@ export class CandidateStateComponent implements OnInit {
   protected get successLabel() {
     return (this.candidate.state as any) == 'hr_interview'
       ? 'Accept'
-      : 'Move to the next Stage';
+      : 'Move to next stage';
   }
 
   protected get successIsDisabled() {
@@ -129,5 +206,9 @@ export class CandidateStateComponent implements OnInit {
       this.allStages.push({ optionLabel: (State as any)[i], optionValue: i });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.interviewDate = new Date(this.dataService.selectedInterview.date);
+    this.interviewScore = this.dataService.selectedInterview.score as number;
+    this.interviewNotes = this.dataService.selectedInterview.notes;
+  }
 }
