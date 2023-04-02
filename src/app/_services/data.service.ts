@@ -120,8 +120,22 @@ export class DataService {
 
   //<<Stages end...
 
+  addPosition(position: Position) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/positions/create',
+      position
+    );
+  }
+
   addTopic(topic: Topic) {
     return this.http.post<any>(environment.apiURL + 'api/topics/create', topic);
+  }
+
+  addTopicToPosition(positionTopic: any) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/topics/add_topic_to_position',
+      positionTopic
+    );
   }
 
   addQuestion(question: Question) {

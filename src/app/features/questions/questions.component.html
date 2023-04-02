@@ -82,6 +82,7 @@
   [(visible)]="tfdisplay"
   styleClass="w-50"
   [style]="{ height: '30rem' }"
+  [maximizable]="true"
 >
   <ng-template pTemplate="header">New Topic</ng-template>
   <form
@@ -157,7 +158,7 @@
   </ng-template>
 </p-dialog>
 
-<p-dialog [(visible)]="qfdisplay" styleClass="w-50">
+<p-dialog [(visible)]="qfdisplay" styleClass="w-50" [maximizable]="true">
   <ng-template pTemplate="header">New Question</ng-template>
   <form
     *ngIf="selectedTopic"

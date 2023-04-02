@@ -206,6 +206,9 @@ export class ProfileComponent implements OnInit {
               (this.interviews.find(
                 (i) => (i.type as any) == this.candidate.state
               ) as Interview) || this.interviews[0];
+            setTimeout(() => {
+              this.refreshStage();
+            }, 100);
           },
           (error) => {}
         );

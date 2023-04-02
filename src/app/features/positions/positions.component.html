@@ -1,10 +1,12 @@
 <div class="fluid-container m-2">
   <div class="row">
     <div class="col-sm-12 col-md-3 col-lg-3 bg-secondary-subtle">
+      <div class="text-center fs-5 py-2 border rounded-end m-1">Positions</div>
       <p-listbox
+        *ngIf="positions.length"
         [options]="positions"
         [group]="true"
-        [(ngModel)]="selectedPosition"
+        [(ngModel)]="selectedPositionId"
         class="card"
         optionLabel="name"
         optionValue="id"
@@ -20,16 +22,216 @@
         </ng-template>
       </p-listbox>
     </div>
-
     <div class="col-sm-12 col-md-9 col-lg-9 bg-secondary-subtle">
-      <div class="card text-center" style="width: 18rem">
-        <div class="card-header">Featured</div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">An item</li>
-          <li class="list-group-item">A second item</li>
-          <li class="list-group-item">A third item</li>
-        </ul>
+      <div class="row my-3">
+        <div class="col-6">
+          <p-button
+            styleClass="w-100 p-button-outlined"
+            label="Add New Position"
+            (click)="pfdisplay = true"
+          ></p-button>
+        </div>
+        <div class="col-6">
+          <p-button
+            pTooltip="Select a position to add topic to"
+            styleClass="w-100"
+            label="Add Topic to Position"
+            (click)="tfdisplay = true"
+            [disabled]="!selectedPosition"
+          ></p-button>
+        </div>
       </div>
+      <p-table
+        *ngIf="selectedPositionTopics && selectedPositionTopics.length"
+        [value]="selectedPositionTopics"
+        styleClass="p-datatable-striped"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Topic</th>
+            <th>Stage</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-topic>
+          <tr>
+            <td>{{ topic.name }}</td>
+            <td>{{ topic.type.replace("_", " ").capitalizeEachWord() }}</td>
+          </tr></ng-template
+        >
+      </p-table>
+      <p-table
+        *ngIf="selectedPositionTopics && !selectedPositionTopics.length"
+        styleClass="p-datatable-striped"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Topic</th>
+            <th>Stage</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <tr>
+            <td colspan="2">No topics related to this position.</td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
   </div>
 </div>
+<p-dialog
+  [(visible)]="pfdisplay"
+  styleClass="w-50"
+  [style]="{ height: '30rem' }"
+  [maximizable]="true"
+>
+  <ng-template pTemplate="header">New Position</ng-template>
+  <form
+    [formGroup]="addPositionForm"
+    method="post"
+    autocomplete="off"
+    class="row g-3 needs-validation"
+  >
+    <div class="col-12">
+      <label class="form-label" for="pteam">Team:</label>
+      <p-dropdown
+        formControlName="Team"
+        [options]="dataService.selectedTeamsCache"
+        optionLabel="name"
+        optionValue="id"
+        id="pteam"
+        [ngClass]="{
+          'is-invalid': pf['Team'].errors && pfsubmitted,
+          'is-valid': !pf['Team'].errors && pfsubmitted
+        }"
+        styleClass="form-control"
+        placeholder="Team"
+      ></p-dropdown>
+      <div *ngIf="pf['Team'].errors && pfsubmitted" class="invalid-feedback">
+        <div *ngIf="pf['Team'].errors['required']">
+          You must specify the team of the position
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <label class="form-label" for="pname">Name:</label>
+      <input
+        type="text"
+        id="pname"
+        pInputText
+        class="form-control"
+        formControlName="Name"
+        [ngClass]="{
+          'is-invalid': pf['Name'].errors && pfsubmitted,
+          'is-valid': !pf['Name'].errors && pfsubmitted
+        }"
+        value=""
+        placeholder="Position Name"
+      />
+      <div *ngIf="pf['Name'].errors && pfsubmitted" class="invalid-feedback">
+        <div *ngIf="pf['Name'].errors['required']">
+          Position name is required
+        </div>
+      </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="Add"
+      class="p-button-primary"
+      type="submit"
+      (click)="addPosition()"
+    >
+      <span
+        *ngIf="pfloading"
+        class="spinner-border spinner-border-sm mr-1"
+      ></span>
+    </button>
+    <button
+      pButton
+      label="Cancel"
+      class="p-button-secondary"
+      type="button"
+      (click)="cancelNewPosition()"
+    ></button>
+    <div *ngIf="pferror" class="alert alert-danger mt-3 mb-0 text-start">
+      {{ pferror }}
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="tfdisplay"
+  styleClass="w-50"
+  [maximizable]="true"
+  [style]="{ height: '30rem' }"
+>
+  <ng-template pTemplate="header">New Position Topic</ng-template>
+  <form
+    *ngIf="selectedPosition"
+    [formGroup]="addTopicForm"
+    method="post"
+    autocomplete="off"
+    class="row g-3 needs-validation"
+  >
+    <div class="col-12">
+      <label class="form-label" for="tposition">Position:</label>
+      <p-dropdown
+        [options]="[selectedPosition]"
+        optionLabel="name"
+        optionValue="id"
+        [disabled]="true"
+        formControlName="Position"
+        id="tposition"
+        styleClass="form-control"
+        placeholder="Topic Position"
+      ></p-dropdown>
+    </div>
+    <div class="col-12">
+      <label class="form-label" for="topic">Topic:</label>
+      <p-cascadeSelect
+        [options]="allTopics"
+        optionLabel="name"
+        optionValue="id"
+        optionGroupLabel="stageName"
+        [optionGroupChildren]="['topics']"
+        styleClass="form-control"
+        formControlName="Topic"
+        id="topic"
+        [ngClass]="{
+          'is-invalid': tf['Topic'].errors && tfsubmitted,
+          'is-valid': !tf['Topic'].errors && tfsubmitted
+        }"
+        value=""
+        placeholder="Topic"
+      ></p-cascadeSelect>
+      <div *ngIf="tf['Topic'].errors && tfsubmitted" class="invalid-feedback">
+        <div *ngIf="tf['Topic'].errors['required']">Topic is required</div>
+      </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="Add"
+      class="p-button-primary"
+      type="submit"
+      (click)="addTopic()"
+    >
+      <span
+        *ngIf="tfloading"
+        class="spinner-border spinner-border-sm mr-1"
+      ></span>
+    </button>
+    <button
+      pButton
+      label="Cancel"
+      class="p-button-secondary"
+      type="button"
+      (click)="cancelNewTopic()"
+    ></button>
+    <div *ngIf="tferror" class="alert alert-danger mt-3 mb-0 text-start">
+      {{ tferror }}
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,6 +1,9 @@
 <div class="text-center card">
   <div class="row p-5 align-middle">
-    <div class="col-md-8 col-sm-12">
+    <div
+      class="col-sm-12"
+      [ngClass]="{ 'col-md-8': dataService.selectedInterview }"
+    >
       <div class="row">
         <div
           class="col-lg-4 order-first col-md-6"

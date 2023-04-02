@@ -178,10 +178,6 @@ export class QuestionsComponent implements OnInit {
     this.qf['Topic'].setValue(this.selectedTopicId);
   }
 
-  protected get noQuestions(): boolean {
-    return this.selectedTopicQuestions.length > 0;
-  }
-
   protected get selectedTopic(): Topic {
     return this.dataService.allTopics.find(
       (t) => t.id == this.selectedTopicId
