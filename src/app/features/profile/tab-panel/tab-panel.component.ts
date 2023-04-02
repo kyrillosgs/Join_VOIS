@@ -8,6 +8,7 @@ import { Question } from 'src/app/_models/question';
 import { Topic } from 'src/app/_models/topic';
 import { User } from 'src/app/_models/user';
 import { DataService } from 'src/app/_services/data.service';
+import { ProfileComponent } from '../profile.component';
 
 @Component({
   selector: 'app-tab-panel',
@@ -30,6 +31,108 @@ export class TabPanelComponent implements OnInit {
   hoveredTag!: number;
   addingTag!: boolean;
   newTag!: any;
+  editingNotes: boolean = false;
+
+  updateNotes(id: number) {
+    this.dataService
+      .editInterviewTopic(this.dataService.selectedInterview.id, id, {
+        notes: (this.topics.find((t) => t.id == id) as Topic).note,
+      })
+      .subscribe((data) => {
+        (
+          this.dataService.selectedInterview.topics.find(
+            (t) => t.id == id
+          ) as any
+        ).note = (this.topics.find((t) => t.id == id) as any).note;
+      });
+    this.editingNotes = false;
+  }
+
+  revertNotes(id: number) {
+    (this.topics.find((t) => t.id == id) as Topic).note = (
+      this.dataService.selectedInterview.topics.find((t) => t.id == id) as Topic
+    ).note;
+  }
+
+  editNotes() {
+    this.editingNotes = true;
+  }
+
+  confirmTopicScoreChange(newScore: number, id: number) {
+    if (
+      newScore !=
+      this.dataService.selectedInterview.topics.find((t) => t.id == id)?.score
+    )
+      this.confirmationService.confirm({
+        message: 'Update topic score?',
+        target: document.querySelector('#tscore' + id) as any,
+        icon: 'pi pi-exclamation-triangle text-warning',
+        key: 'removeAssignee',
+        acceptButtonStyleClass: 'p-button-success',
+        rejectButtonStyleClass: 'p-button-secondary',
+        accept: () => {
+          this.dataService
+            .editInterviewTopic(this.dataService.selectedInterview.id, id, {
+              score: (this.topics.find((t) => t.id == id) as Topic).score,
+            })
+            .subscribe((data) => {
+              (
+                this.dataService.selectedInterview.topics.find(
+                  (t) => t.id == id
+                ) as any
+              ).score = newScore;
+            });
+        },
+        reject: () => {
+          (this.topics.find((t) => t.id == id) as any).score = (
+            this.dataService.selectedInterview.topics.find(
+              (t) => t.id == id
+            ) as any
+          ).score;
+        },
+      });
+  }
+
+  confirmQuestionScoreChange(newScore: number, id: number) {
+    if (
+      newScore !=
+      this.dataService.selectedInterview.questions.find((q) => q.id == id)
+        ?.score
+    )
+      this.confirmationService.confirm({
+        message: 'Update question score?',
+        target: document.querySelector('#qscore' + id) as any,
+        icon: 'pi pi-exclamation-triangle text-warning',
+        key: 'removeAssignee',
+        acceptButtonStyleClass: 'p-button-success',
+        rejectButtonStyleClass: 'p-button-secondary',
+        accept: () => {
+          this.dataService
+            .editInterviewQuestion(this.dataService.selectedInterview.id, id, {
+              score: newScore,
+            })
+            .subscribe((data) => {
+              (
+                this.dataService.selectedInterview.questions.find(
+                  (q) => q.id == id
+                ) as Question
+              ).score = newScore;
+            });
+        },
+        reject: () => {
+          (this.questions.find((q) => q.id == id) as Question).score =
+            this.dataService.selectedInterview.questions.find((q) => q.id == id)
+              ?.score as number;
+        },
+      });
+  }
+
+  getScoreColor(id: number, property: string) {
+    return (this as any)[property].find((p: Topic | Question) => p.id == id)
+      .score >= 50
+      ? '#34A835'
+      : '#e91224';
+  }
 
   confirmAssigneeRemoval(event: any, index: number) {
     this.confirmationService.confirm({
@@ -93,13 +196,18 @@ export class TabPanelComponent implements OnInit {
 
   constructor(
     public dataService: DataService,
-    public confirmationService: ConfirmationService
+    public confirmationService: ConfirmationService,
+    private profileComponent: ProfileComponent
   ) {}
 
   ngOnInit() {
     if (this.dataService.selectedInterview) {
-      this.topics = this.dataService.selectedInterview.topics;
-      this.questions = this.dataService.selectedInterview.questions;
+      this.topics = JSON.parse(
+        JSON.stringify(this.dataService.selectedInterview.topics)
+      );
+      this.questions = JSON.parse(
+        JSON.stringify(this.dataService.selectedInterview.questions)
+      );
       this.assignees = this.dataService.selectedInterview.assignees;
       for (let i in Stage)
         if (
@@ -139,11 +247,16 @@ export class TabPanelComponent implements OnInit {
     this.dataService.selectedInterview = this.interviews.find(
       (i) => i.type == this.allStages[e].optionValue
     ) as Interview;
-    this.topics = this.dataService.selectedInterview.topics;
-    this.questions = this.dataService.selectedInterview.questions;
+    this.topics = JSON.parse(
+      JSON.stringify(this.dataService.selectedInterview.topics)
+    );
+    this.questions = JSON.parse(
+      JSON.stringify(this.dataService.selectedInterview.questions)
+    );
     this.assignees = this.dataService.selectedInterview.assignees;
     this.addingTag = false;
     this.newTag = '';
+    this.profileComponent.refreshStage();
   }
 
   getTopicQuestions(topic_id: number) {

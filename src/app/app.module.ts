@@ -29,6 +29,9 @@ import { AccordionModule } from 'primeng/accordion';
 import { MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
+import { RippleModule } from 'primeng/ripple';
+import { ListboxModule } from 'primeng/listbox';
+import { TabMenuModule } from 'primeng/tabmenu';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './features/home/home.component';
@@ -48,7 +51,8 @@ import { windowFactory } from './core/token/window-factory';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HeadersService } from './interceptors/Headers.service';
 import { ErrorhandlerService } from './interceptors/global-error-handler/errorhandler.service';
-import { PillsComponent } from './shared/pills/pills.component';
+import { PositionsComponent } from './features/positions/positions.component';
+import { QuestionsComponent } from './features/questions/questions.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +66,8 @@ import { PillsComponent } from './shared/pills/pills.component';
     CandidateStateComponent,
     TabPanelComponent,
     LoginComponent,
-    PillsComponent,
+    PositionsComponent,
+    QuestionsComponent,
   ],
   imports: [
     BrowserModule,
@@ -97,6 +102,9 @@ import { PillsComponent } from './shared/pills/pills.component';
     AccordionModule,
     CascadeSelectModule,
     CalendarModule,
+    RippleModule,
+    ListboxModule,
+    TabMenuModule,
   ],
   providers: [
     ConfirmationService,

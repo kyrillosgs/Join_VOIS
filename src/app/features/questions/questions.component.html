@@ -1,0 +1,249 @@
+<div class="fluid-container m-2">
+  <div class="row">
+    <div class="col-sm-12 col-md-3 col-lg-3 bg-secondary-subtle">
+      <div class="text-center fs-5 py-2 border rounded-end m-1">Topics</div>
+      <p-listbox
+        *ngIf="topics.length"
+        [options]="topics"
+        [group]="true"
+        [(ngModel)]="selectedTopicId"
+        class="card"
+        optionLabel="name"
+        optionValue="id"
+        optionGroupLabel="stageName"
+        optionGroupChildren="topics"
+        (onChange)="changeTopic($event)"
+      >
+        <ng-template let-group pTemplate="group">
+          <div class="flex align-items-center">
+            <i class="pi pi-list fw-bold"></i>
+            <span class="ml-1">{{ group.stageName }}</span>
+          </div>
+        </ng-template>
+      </p-listbox>
+    </div>
+    <div class="col-sm-12 col-md-9 col-lg-9 bg-secondary-subtle">
+      <div class="row my-3">
+        <div class="col-6">
+          <p-button
+            styleClass="w-100 p-button-outlined"
+            label="Add New Topic"
+            (click)="tfdisplay = true"
+          ></p-button>
+        </div>
+        <div class="col-6">
+          <p-button
+            pTooltip="Select a topic to add questions to"
+            styleClass="w-100"
+            label="Add New Question"
+            (click)="qfdisplay = true"
+            [disabled]="!selectedTopic"
+          ></p-button>
+        </div>
+      </div>
+      <p-table
+        *ngIf="selectedTopicQuestions && selectedTopicQuestions.length"
+        [value]="selectedTopicQuestions"
+        styleClass="p-datatable-striped"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Question</th>
+            <th>Answer</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-question>
+          <tr>
+            <td>{{ question.name }}</td>
+            <td>{{ question.answer }}</td>
+          </tr></ng-template
+        >
+      </p-table>
+      <p-table
+        *ngIf="selectedTopicQuestions && !selectedTopicQuestions.length"
+        styleClass="p-datatable-striped"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Question</th>
+            <th>Answer</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <tr>
+            <td colspan="2">No questions related to this topic.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+<p-dialog
+  [(visible)]="tfdisplay"
+  styleClass="w-50"
+  [style]="{ height: '30rem' }"
+>
+  <ng-template pTemplate="header">New Topic</ng-template>
+  <form
+    [formGroup]="addTopicForm"
+    method="post"
+    autocomplete="off"
+    class="row g-3 needs-validation"
+  >
+    <div class="col-12">
+      <label class="form-label" for="ttype">Stage:</label>
+      <p-dropdown
+        formControlName="Stage"
+        [options]="stages"
+        optionLabel="optionLabel"
+        optionValue="optionValue"
+        id="ttype"
+        [ngClass]="{
+          'is-invalid': tf['Stage'].errors && tfsubmitted,
+          'is-valid': !tf['Stage'].errors && tfsubmitted
+        }"
+        styleClass="form-control"
+        placeholder="Topic Stage"
+      ></p-dropdown>
+      <div *ngIf="tf['Stage'].errors && tfsubmitted" class="invalid-feedback">
+        <div *ngIf="tf['Stage'].errors['required']">
+          You must specify the stage of the topic
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <label class="form-label" for="tname">Name:</label>
+      <input
+        type="text"
+        id="tname"
+        pInputText
+        class="form-control"
+        formControlName="Name"
+        [ngClass]="{
+          'is-invalid': tf['Name'].errors && tfsubmitted,
+          'is-valid': !tf['Name'].errors && tfsubmitted
+        }"
+        value=""
+        placeholder="Topic Name"
+      />
+      <div *ngIf="tf['Name'].errors && tfsubmitted" class="invalid-feedback">
+        <div *ngIf="tf['Name'].errors['required']">Topic Name is required</div>
+      </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="Add"
+      class="p-button-primary"
+      type="submit"
+      (click)="addTopic()"
+    >
+      <span
+        *ngIf="tfloading"
+        class="spinner-border spinner-border-sm mr-1"
+      ></span>
+    </button>
+    <button
+      pButton
+      label="Cancel"
+      class="p-button-secondary"
+      type="button"
+      (click)="cancelNewTopic()"
+    ></button>
+    <div *ngIf="tferror" class="alert alert-danger mt-3 mb-0 text-start">
+      {{ tferror }}
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="qfdisplay" styleClass="w-50">
+  <ng-template pTemplate="header">New Question</ng-template>
+  <form
+    *ngIf="selectedTopic"
+    [formGroup]="addQuestionForm"
+    method="post"
+    autocomplete="off"
+    class="row g-3 needs-validation"
+  >
+    <div class="col-12">
+      <label class="form-label" for="qtopic">Topic:</label>
+      <p-dropdown
+        [options]="[selectedTopic]"
+        optionLabel="name"
+        optionValue="id"
+        [disabled]="true"
+        formControlName="Topic"
+        id="qtopic"
+        styleClass="form-control"
+        placeholder="Question Topic"
+      ></p-dropdown>
+    </div>
+    <div class="col-12">
+      <label class="form-label" for="qtext">Question:</label>
+      <textarea
+        pInputTextarea
+        [autoResize]="true"
+        id="qtext"
+        formControlName="Text"
+        [ngClass]="{
+          'is-invalid': qf['Text'].errors && qfsubmitted,
+          'is-valid': !qf['Text'].errors && qfsubmitted
+        }"
+        value=""
+        placeholder="Question Text"
+        class="form-control"
+      ></textarea>
+      <div *ngIf="qf['Text'].errors && qfsubmitted" class="invalid-feedback">
+        <div *ngIf="qf['Text'].errors['required']">
+          Question text is required
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <label class="form-label" for="qanswer">Answer:</label>
+      <textarea
+        pInputTextarea
+        [autoResize]="true"
+        id="qanswer"
+        formControlName="Answer"
+        [ngClass]="{
+          'is-invalid': qf['Answer'].errors && qfsubmitted,
+          'is-valid': !qf['Answer'].errors && qfsubmitted
+        }"
+        value=""
+        placeholder="Question Model Answer"
+        class="form-control"
+      ></textarea>
+      <div *ngIf="qf['Answer'].errors && qfsubmitted" class="invalid-feedback">
+        <div *ngIf="qf['Answer'].errors['required']">
+          Question answer is required
+        </div>
+      </div>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="Add"
+      class="p-button-primary"
+      type="submit"
+      (click)="addQuestion()"
+    >
+      <span
+        *ngIf="qfloading"
+        class="spinner-border spinner-border-sm mr-1"
+      ></span>
+    </button>
+    <button
+      pButton
+      label="Cancel"
+      class="p-button-secondary"
+      type="button"
+      (click)="cancelNewQuestion()"
+    ></button>
+    <div *ngIf="qferror" class="alert alert-danger mt-3 mb-0 text-start">
+      {{ qferror }}
+    </div>
+  </ng-template>
+</p-dialog>

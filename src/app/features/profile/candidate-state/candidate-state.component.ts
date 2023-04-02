@@ -1,5 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  AfterContentInit,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Candidate } from 'src/app/_models/candidate';
 import { DataService } from 'src/app/_services/data.service';
@@ -15,9 +22,10 @@ import { ConfirmationService } from 'primeng/api';
   templateUrl: './candidate-state.component.html',
   styleUrls: ['./candidate-state.component.css'],
 })
-export class CandidateStateComponent implements OnInit {
+export class CandidateStateComponent implements OnInit, AfterContentInit {
   @Input() candidate!: Candidate;
   @Input() interviews!: Interview[];
+  @ViewChild('notes') notes!: ElementRef;
   allStages: any[] = [];
   interviewDate!: Date;
   editingData: { date: boolean; notes: boolean } = {
@@ -27,11 +35,21 @@ export class CandidateStateComponent implements OnInit {
   interviewScore!: number;
   interviewNotes: string | undefined;
 
+  ngAfterContentInit(): void {
+    (document.querySelector('p-calendar') as any).style.visibility = 'hidden';
+    (document.querySelector('p-calendar') as any).style.position = 'absolute';
+  }
+
   updateNotes() {
     this.editInterview(this.dataService.selectedInterview.id, {
       notes: this.interviewNotes,
     });
     this.editingData.notes = false;
+  }
+
+  editNotes() {
+    this.editingData.notes = true;
+    this.notes.nativeElement.focus();
   }
 
   confirmScoreChange(newScore: number) {
@@ -150,10 +168,18 @@ export class CandidateStateComponent implements OnInit {
     });
   }
 
-  editInterview(id: number, update: Object) {
-    this.dataService.editInterview(id, update).subscribe((data) => {
-      this.profileComponent.retrieveInterviews();
-    });
+  editInterview(id: number, update: any) {
+    this.dataService.editInterview(id, update).subscribe(
+      (data) => {
+        (this.dataService.selectedInterview as any)[Object.keys(update)[0]] =
+          Object.values(update)[0];
+      },
+      (error) => {
+        (this as any)[
+          'interview' + (Object.keys(update)[0] as any).capitalizeEachWord()
+        ] = (this.dataService.selectedInterview as any)[Object.keys(update)[0]];
+      }
+    );
   }
 
   protected get interviewName(): string {
@@ -183,6 +209,16 @@ export class CandidateStateComponent implements OnInit {
     );
   }
 
+  protected get rejectIsDisabled() {
+    return (
+      this.interviews.find((i) => (i.type as any) == 'hr_interview')?.result ==
+        (Result as any)[1] ||
+      (this.interviews.find((i) => i.type == (this.candidate.state as any))
+        ?.result as any) == (Result as any)[2] ||
+      (this.candidate.state as any) == 'pending_review'
+    );
+  }
+
   protected get interviewResult() {
     return (
       this.dataService.selectedInterview.result as any
@@ -206,9 +242,13 @@ export class CandidateStateComponent implements OnInit {
       this.allStages.push({ optionLabel: (State as any)[i], optionValue: i });
   }
 
+  initData() {
+    this.interviewDate = new Date(this.dataService.selectedInterview?.date);
+    this.interviewScore = this.dataService.selectedInterview?.score as number;
+    this.interviewNotes = this.dataService.selectedInterview?.notes;
+  }
+
   ngOnInit() {
-    this.interviewDate = new Date(this.dataService.selectedInterview.date);
-    this.interviewScore = this.dataService.selectedInterview.score as number;
-    this.interviewNotes = this.dataService.selectedInterview.notes;
+    this.initData();
   }
 }

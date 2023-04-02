@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { Candidate } from 'src/app/_models/candidate';
@@ -9,6 +9,7 @@ import { Question } from 'src/app/_models/question';
 import { Topic } from 'src/app/_models/topic';
 import { User } from 'src/app/_models/user';
 import { DataService } from 'src/app/_services/data.service';
+import { CandidateStateComponent } from './candidate-state/candidate-state.component';
 
 @Component({
   selector: 'app-profile',
@@ -16,6 +17,8 @@ import { DataService } from 'src/app/_services/data.service';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild(CandidateStateComponent)
+  candidateStateComponent!: CandidateStateComponent;
   private candidateId!: number;
   protected candidate!: Candidate;
   public destroyed = new Subject<any>();
@@ -207,6 +210,10 @@ export class ProfileComponent implements OnInit {
           (error) => {}
         );
       });
+  }
+
+  refreshStage() {
+    this.candidateStateComponent.initData();
   }
 
   ngOnDestroy(): void {

@@ -38,6 +38,7 @@ export class MenuComponent implements OnInit {
       this.retrieveTeamCandidates(e.itemValue.id);
     else this.removeTeamCandidates(e.itemValue.id);
     this.selectedTeams = Array.from(this.dataService.selectedTeamsCache);
+    this.dataService.selectedTeamsBS.next(this.dataService.selectedTeamsCache);
   }
 
   clearBoard() {
@@ -82,14 +83,12 @@ export class MenuComponent implements OnInit {
       {
         label: 'Open Positions',
         icon: 'pi pi-briefcase',
-        // routerLink: '/home',
-        disabled: true,
+        routerLink: '/positions',
       },
       {
         label: 'Question Bank',
         icon: 'pi pi-question',
-        // routerLink: '/home',
-        disabled: true,
+        routerLink: '/questions',
       },
       {
         label: 'Tags Dashboard',
@@ -135,6 +134,7 @@ export class MenuComponent implements OnInit {
       });
     }
     this.selectedTeams = Array.from(this.dataService.selectedTeamsCache);
+    this.dataService.selectedTeamsBS.next(this.dataService.selectedTeamsCache);
   }
 
   showLogOut(): void {

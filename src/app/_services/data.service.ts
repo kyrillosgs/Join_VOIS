@@ -10,6 +10,9 @@ import { User } from '../_models/user';
 import { Team } from '../_models/team';
 import { Interview } from '../_models/interview';
 import { Position } from '../_models/position';
+import { Subject, BehaviorSubject } from 'rxjs';
+import { Topic } from '../_models/topic';
+import { Question } from '../_models/question';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +23,10 @@ export class DataService {
   public selectedTeamsCache: Team[] = [];
   public selectedInterview!: Interview;
   public allPositions: Position[] = [];
+  public allTopics: Topic[] = [];
+
+  public selectedTeamsBS = new BehaviorSubject(this.selectedTeamsCache);
+  public allPositionsBS = new BehaviorSubject(this.allPositions);
 
   drawBoard(): void {
     this.allCandidates.sort((a: Candidate, b: Candidate) => {
@@ -59,6 +66,7 @@ export class DataService {
     this.loggedInUser = authService.getTokenDataAfterDecode()?.user;
     this.getAllPositions().subscribe((data) => {
       this.allPositions = data;
+      this.allPositionsBS.next(this.allPositions);
     });
   }
 
@@ -112,6 +120,17 @@ export class DataService {
 
   //<<Stages end...
 
+  addTopic(topic: Topic) {
+    return this.http.post<any>(environment.apiURL + 'api/topics/create', topic);
+  }
+
+  addQuestion(question: Question) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/questions/create',
+      question
+    );
+  }
+
   addCandidate(candidate: Candidate) {
     return this.http.post<any>(
       environment.apiURL + 'api/candidates/create',
@@ -154,6 +173,20 @@ export class DataService {
     return this.http.get<Position[]>(environment.apiURL + 'api/positions');
   }
 
+  getAllTopics() {
+    return this.http.get<Topic[]>(environment.apiURL + 'api/topics');
+  }
+
+  getAllQuestions() {
+    return this.http.get<Question[]>(environment.apiURL + 'api/questions');
+  }
+
+  getPositionTopics(id: number) {
+    return this.http.get<Topic[]>(
+      environment.apiURL + 'api/topics/get_all_topics_by_position/' + id
+    );
+  }
+
   getCandidateInterviews(id: number) {
     return this.http.get<{ data: Interview[] }>(
       environment.apiURL + 'api/interviews/get_interview_to_candidate/' + id
@@ -178,6 +211,24 @@ export class DataService {
     return this.http.post<any>(
       environment.apiURL + 'api/interviews/edit/' + interview_id,
       update
+    );
+  }
+
+  editInterviewTopic(interview_id: number, topics_id: number, update: Object) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/interviews/update_interview_topics',
+      { ...update, interview_id, topics_id }
+    );
+  }
+
+  editInterviewQuestion(
+    interview_id: number,
+    question_id: number,
+    update: Object
+  ) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/interviews/update_interview_question',
+      { ...update, interview_id, question_id }
     );
   }
 }

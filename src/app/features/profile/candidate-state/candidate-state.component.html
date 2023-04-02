@@ -96,7 +96,7 @@
             pRipple
             type="button"
             (click)="confirmReject()"
-            [disabled]="successIsDisabled"
+            [disabled]="rejectIsDisabled"
             label="Reject"
             class="p-button-raised p-button-danger m-0"
           ></button>
@@ -110,6 +110,7 @@
     >
       <span class="p-float-label">
         <textarea
+          #notes
           id="interview-notes"
           style="width: 100%"
           rows="8"
@@ -127,7 +128,7 @@
             bottom: '7%',
             left: '3%'
           }"
-          (click)="editingData.notes = true"
+          (click)="editNotes()"
         ></p-button>
         <p-button
           icon="pi pi-times"
@@ -163,10 +164,10 @@
 <p-confirmPopup [key]="'score'"></p-confirmPopup>
 
 <p-calendar
+  #calendar
   [(ngModel)]="interviewDate"
   [showTime]="true"
   [touchUI]="true"
   (onShow)="onShowCalendar()"
   (onClose)="onDateChanged()"
-  style="visibility: hidden; position: absolute"
 ></p-calendar>

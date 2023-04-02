@@ -132,3 +132,11 @@ p-cascadeselect[id="crecruiter"]
   div.p-overlay.p-component:has(li.p-cascadeselect-item-active) {
   min-width: 50% !important;
 }
+
+.p-menuitem-link-active {
+  background: radial-gradient(
+    circle,
+    rgba(250, 235, 207, 1) 70%,
+    rgba(149, 149, 149, 0) 100%
+  );
+}
