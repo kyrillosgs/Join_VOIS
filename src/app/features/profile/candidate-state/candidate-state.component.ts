@@ -124,6 +124,15 @@ export class CandidateStateComponent implements OnInit, AfterContentInit {
         })
         .subscribe((data) => {
           this.profileComponent.retrieveInterviews();
+          (
+            this.dataService.allCandidates.find(
+              (c) => c.id == this.candidate.id
+            ) as any
+          ).state =
+            Object.keys(State)[
+              Object.keys(State).indexOf(this.candidate.state as any) + 1
+            ];
+          this.dataService.drawBoard();
         });
   }
 

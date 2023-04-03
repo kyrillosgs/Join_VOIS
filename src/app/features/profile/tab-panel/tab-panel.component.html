@@ -6,7 +6,10 @@
   [activeIndex]="activeIndex"
 >
   <p-tabPanel *ngFor="let tab of allStages" [header]="tab.optionLabel">
-    <div class="row">
+    <div
+      class="row"
+      *ngIf="tab.optionValue == dataService.selectedInterview.type"
+    >
       <div class="col-12 mb-2">
         <p-tag
           *ngFor="let assignee of assignees; let i = index"
