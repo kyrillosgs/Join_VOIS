@@ -120,6 +120,13 @@ export class DataService {
 
   //<<Stages end...
 
+  addQuestionsToInterview(interviewQuestions: object) {
+    return this.http.post<any>(
+      environment.apiURL + 'api/interviews/add_question_to_interview',
+      interviewQuestions
+    );
+  }
+
   addPosition(position: Position) {
     return this.http.post<any>(
       environment.apiURL + 'api/positions/create',

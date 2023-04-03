@@ -52,7 +52,7 @@
             <button
               *ngIf="!addingTag"
               class="button icon p-0 p-button-secondary p-button-text text-light p-button-sm"
-              title="Add tag"
+              title="Add assignee"
               type="button"
               pButton
               (click)="addAssigneeClick()"
@@ -64,6 +64,7 @@
           label="Generate Questions"
           styleClass="p-button-rounded p-button-secondary"
           class="float-right"
+          (click)="fdisplay = true"
         ></p-button>
       </div>
       <div class="col-12">
@@ -171,3 +172,114 @@
 </p-tabView>
 
 <p-confirmPopup [key]="'removeAssignee'"></p-confirmPopup>
+
+<p-dialog
+  [(visible)]="fdisplay"
+  styleClass="w-50"
+  [style]="{ height: '30rem' }"
+  [maximizable]="true"
+>
+  <ng-template pTemplate="header">Generate Questions</ng-template>
+  <form
+    [formGroup]="generateQuestionsForm"
+    method="post"
+    autocomplete="off"
+    class="row g-3 needs-validation"
+  >
+    <div class="col-12">
+      <label class="form-label" for="gtopic">Topic:</label>
+      <p-dropdown
+        formControlName="Topic"
+        [options]="dataService.selectedInterview.topics"
+        optionLabel="name"
+        optionValue="id"
+        id="gtopic"
+        [ngClass]="{
+          'is-invalid': f['Topic'].errors && fsubmitted,
+          'is-valid': !f['Topic'].errors && fsubmitted
+        }"
+        styleClass="form-control"
+        placeholder="Topic"
+        (onChange)="changeTopic($event)"
+      ></p-dropdown>
+      <div *ngIf="f['Topic'].errors && fsubmitted" class="invalid-feedback">
+        <div *ngIf="f['Topic'].errors['required']">
+          You must specify the topic
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div
+    class="col-12"
+    *ngIf="selectedTopicQuestions && selectedTopicQuestions.length > 0"
+  >
+    <label class="form-label mt-2" for="gquestions">Questions:</label>
+    <p-multiSelect
+      id="gquestions"
+      [options]="selectedTopicQuestions"
+      [(ngModel)]="selectedQuestions"
+      styleClass="form-control mt-0"
+      optionLabel="name"
+      optioValue="id"
+      placeholder="Select Questions"
+      display="chip"
+    >
+      <ng-template let-value pTemplate="selectedItems">
+        <div
+          class="flex align-items-center gap-2"
+          *ngFor="let option of selectedQuestions"
+        >
+          <p-chip
+            (onRemove)="removeQuestion($event, option.id)"
+            [pTooltip]="option.name"
+            label="{{
+              option.name
+                .substring(0, 10)
+                .concat(option.name.length > 10 ? '...' : '')
+            }}"
+            [removable]="true"
+          ></p-chip>
+        </div>
+        <div *ngIf="!selectedQuestions || selectedQuestions.length === 0">
+          Select Questions
+        </div>
+      </ng-template>
+      <ng-template let-question pTemplate="item">
+        <div class="flex align-items-center gap-2">
+          <div pTooltip="{{ question.name }}">
+            {{
+              question.name
+                .substring(0, 30)
+                .concat(question.name.length > 30 ? "..." : "")
+            }}
+          </div>
+        </div>
+      </ng-template>
+    </p-multiSelect>
+  </div>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="Confirm"
+      class="p-button-primary"
+      type="submit"
+      (click)="generateQuestions()"
+    >
+      <span
+        *ngIf="floading"
+        class="spinner-border spinner-border-sm mr-1"
+      ></span>
+    </button>
+    <button
+      pButton
+      label="Cancel"
+      class="p-button-secondary"
+      type="button"
+      (click)="cancelQuestionsGeneration()"
+    ></button>
+    <div *ngIf="ferror" class="alert alert-danger mt-3 mb-0 text-start">
+      {{ ferror }}
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Candidate } from 'src/app/_models/candidate';
 import { Stage } from 'src/app/_models/enums/stage';
@@ -32,6 +33,88 @@ export class TabPanelComponent implements OnInit {
   addingTag!: boolean;
   newTag!: any;
   editingNotes: boolean = false;
+
+  generateQuestionsForm!: FormGroup;
+  selectedTopicQuestions!: Question[];
+  fdisplay: boolean = false;
+  ferror!: string;
+  floading: boolean = false;
+  fsubmitted: boolean = false;
+  selectedQuestions: Question[] = [];
+
+  removeQuestion(e: any, id: number) {
+    this.selectedQuestions.splice(
+      this.selectedQuestions.findIndex((q) => q.id == id),
+      1
+    );
+  }
+
+  changeTopic(e: any) {
+    this.selectedTopicQuestions = [];
+    this.dataService.getAllQuestions().subscribe((data) => {
+      this.selectedTopicQuestions = data.filter((q) => q.topics_id == e.value);
+      let sq = this.dataService.selectedInterview.questions
+        .filter((q) => q.topics_id == e.value)
+        .map((s) => s.id);
+      this.selectedQuestions = this.selectedTopicQuestions.filter(
+        (s) => sq.indexOf(s.id) > -1
+      );
+    });
+  }
+
+  generateQuestions() {
+    this.fsubmitted = true;
+    if (this.generateQuestionsForm.invalid) return;
+    this.floading = true;
+    let q = {
+      question_ids: this.selectedQuestions.map((i: Question) => i.id),
+      topic_id: this.f['Topic'].value,
+      interview_id: this.dataService.selectedInterview.id,
+    };
+    this.dataService.addQuestionsToInterview(q).subscribe(
+      (data) => {
+        this.ferror = '';
+        this.floading = false;
+        let idsToRemove = this.dataService.selectedInterview.questions
+          .filter(
+            (qq) =>
+              !q.question_ids.includes(qq.id) && qq.topics_id == q.topic_id
+          )
+          .map((qq, i) => i);
+        idsToRemove.forEach((i) => {
+          this.dataService.selectedInterview.questions.splice(i, 1);
+        });
+        let questionsToAdd = this.selectedQuestions.filter(
+          (qq) =>
+            !this.dataService.selectedInterview.questions.find(
+              (qqq) => qqq.id == qq.id
+            )
+        );
+        this.dataService.selectedInterview.questions.push(...questionsToAdd);
+        // push(
+        //   ...this.selectedQuestions
+        // );
+        this.questions = JSON.parse(
+          JSON.stringify(this.dataService.selectedInterview.questions)
+        );
+        this.cancelQuestionsGeneration();
+      },
+      (error) => {
+        this.ferror = error;
+        this.floading = false;
+      }
+    );
+  }
+
+  cancelQuestionsGeneration() {
+    this.generateQuestionsForm.reset();
+    this.selectedQuestions = [];
+    this.selectedTopicQuestions = [];
+    this.fdisplay = false;
+    this.floading = false;
+    this.ferror = '';
+    this.fsubmitted = false;
+  }
 
   updateNotes(id: number) {
     this.dataService
@@ -197,7 +280,8 @@ export class TabPanelComponent implements OnInit {
   constructor(
     public dataService: DataService,
     public confirmationService: ConfirmationService,
-    private profileComponent: ProfileComponent
+    private profileComponent: ProfileComponent,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -235,6 +319,10 @@ export class TabPanelComponent implements OnInit {
       },
       (error) => {}
     );
+    this.generateQuestionsForm = this.formBuilder.group({
+      Topic: ['', [Validators.required]],
+      Questions: [''],
+    });
   }
 
   protected get activeIndex() {
@@ -263,5 +351,7 @@ export class TabPanelComponent implements OnInit {
     return this.questions.filter((q) => q.topics_id == topic_id);
   }
 
-  //scrollableTabs: any[] = Array.from({ length: 50 }, (_, i) => ({ title: `Tab ${i + 1}`, content: `Tab ${i + 1} Content` }));
+  protected get f() {
+    return this.generateQuestionsForm.controls;
+  }
 }
