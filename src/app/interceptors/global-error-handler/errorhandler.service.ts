@@ -42,7 +42,7 @@ export class ErrorhandlerService implements HttpInterceptor {
           //   this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
 
           // }
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error' });
         }
         return throwError(() => new Error('error'));
       })

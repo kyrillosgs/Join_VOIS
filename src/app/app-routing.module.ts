@@ -23,7 +23,7 @@ const routes: Routes = [
   },
   {
     path: 'candidates',
-    canActivate: [AuthGuard, RedirectGuard],
+    canActivate: [RedirectGuard],
     component: ProfileComponent,
   },
   {
