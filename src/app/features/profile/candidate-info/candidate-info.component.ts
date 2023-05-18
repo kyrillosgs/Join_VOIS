@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Candidate } from 'src/app/_models/candidate';
 import { DataService } from 'src/app/_services/data.service';
 import { ConfirmationService } from 'primeng/api';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-candidate-info',
@@ -25,7 +26,7 @@ export class CandidateInfoComponent implements OnInit {
   ngOnInit(): void {
     this.downloadLink = document.createElement('a');
 
-    this.imgSrc = 'https://hiring-tool.ahmedsaleh.net/' + this.candidate.img;
+    this.imgSrc = environment.apiURL + this.candidate.img;
     this.downloadLink.setAttribute('download', this.candidate.name);
     this.dataService.getCV(this.candidate.id).subscribe(
       (data) => {
