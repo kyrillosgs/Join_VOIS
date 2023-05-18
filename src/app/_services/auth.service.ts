@@ -7,8 +7,7 @@ import { AccountService } from './account.service';
 import { LocalStorageKeys } from '../_models/enums/local-storage-keys.enum';
 import { AppJwtData } from '../_models/Interfaces/app-security-factory.interface';
 import { DateUtil } from '../_helpers/DateUtil';
-
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -19,13 +18,14 @@ import { DateUtil } from '../_helpers/DateUtil';
 export class AuthService {
   private jwtService = new JwtHelperService();
   /** this observable is ued to send loggin state between other componentns */
-  private isUserLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private isUserLoggedIn$: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
 
   constructor(
     private http: HttpClient,
     private localStorageService: LocalStorageService,
     private accountService: AccountService
-  ) { }
+  ) {}
 
   /** toggle between login state */
   setLoginState(isLoggedIn: boolean = false) {
@@ -69,8 +69,6 @@ export class AuthService {
     let rolesArray = this.userTokenData?.roles!.split(',');
     return rolesArray;
   }
-
-
 
   /** get token data decoded for work */
   getTokenDataAfterDecode(): any {
@@ -118,32 +116,43 @@ export class AuthService {
   }
 
   getUserInfo(): AppJwtData | null {
-    const tokenData = this.localStorageService.getSessionStorage(LocalStorageKeys.APP_TOKEN);
+    const tokenData = this.localStorageService.getSessionStorage(
+      LocalStorageKeys.APP_TOKEN
+    );
     return tokenData ? this.getDecodedData(tokenData) ?? null : null;
   }
 
   getToken(): string | null {
-    const token: string | null = this.localStorageService.getSessionStorage(LocalStorageKeys.APP_TOKEN);
+    const token: string | null = this.localStorageService.getSessionStorage(
+      LocalStorageKeys.APP_TOKEN
+    );
     return token;
   }
 
-
   getRefreshToken(): string | null {
-    const refreshToken: string | null = this.localStorageService.getSessionStorage(LocalStorageKeys.APP_REFRESH_TOKEN);
+    const refreshToken: string | null =
+      this.localStorageService.getSessionStorage(
+        LocalStorageKeys.APP_REFRESH_TOKEN
+      );
     return refreshToken;
   }
 
   refreshToken() {
     const tokenModel = {
       accessToken: this.getToken(),
-      refresh_token: this.getRefreshToken()
+      refresh_token: this.getRefreshToken(),
     };
-    return this.http.post<any>('https://hiring-tool.ahmedsaleh.net/api/refresh_token', tokenModel);
+    return this.http.post<any>(
+      environment.apiURL + 'api/refresh_token',
+      tokenModel
+    );
   }
 
-
   async refreshingTokens(token: string | null): Promise<boolean> {
-    const refreshToken: string | null = this.localStorageService.getSessionStorage(LocalStorageKeys.APP_REFRESH_TOKEN);
+    const refreshToken: string | null =
+      this.localStorageService.getSessionStorage(
+        LocalStorageKeys.APP_REFRESH_TOKEN
+      );
 
     if (!token || !refreshToken) {
       return false;
@@ -152,17 +161,23 @@ export class AuthService {
     const tokenModel = { accessToken: token, refresh_token: refreshToken };
     let isRefreshSuccess: boolean;
     try {
-      const response = await this.accountService.refreshToken(tokenModel).toPromise();
+      const response = await this.accountService
+        .refreshToken(tokenModel)
+        .toPromise();
       const newToken = (<any>response).token;
       const newRefreshToken = (<any>response).refresh_token;
-      this.localStorageService.setSessionStorage(LocalStorageKeys.APP_TOKEN, newToken);
-      this.localStorageService.setSessionStorage(LocalStorageKeys.APP_REFRESH_TOKEN, newRefreshToken);
+      this.localStorageService.setSessionStorage(
+        LocalStorageKeys.APP_TOKEN,
+        newToken
+      );
+      this.localStorageService.setSessionStorage(
+        LocalStorageKeys.APP_REFRESH_TOKEN,
+        newRefreshToken
+      );
       isRefreshSuccess = true;
-    }
-    catch (ex) {
+    } catch (ex) {
       isRefreshSuccess = false;
     }
     return isRefreshSuccess;
   }
-
 }

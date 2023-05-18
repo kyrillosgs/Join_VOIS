@@ -3,22 +3,23 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthenticationResponse, LoginDto } from '../_models/account.model';
 import { AppBaseResponse } from '../_models/Interfaces/app-response.inerface';
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AccountService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
+  login(model: LoginDto): Observable<AppBaseResponse<AuthenticationResponse>> {
+    return this.http.post<AppBaseResponse<AuthenticationResponse>>(
+      environment.apiURL + 'api/login',
+      model
+    );
+  }
+  refreshToken = (model: any): Observable<AppBaseResponse<any>> =>
+    this.http.post<any>(environment.apiURL + 'api/refresh_token', model);
 
-  login (model: LoginDto): Observable<AppBaseResponse<AuthenticationResponse>> 
-  {
-    return this.http.post<AppBaseResponse<AuthenticationResponse>>('https://hiring-tool.ahmedsaleh.net/api/login', model);
-  } 
-  refreshToken = (model: any): Observable<AppBaseResponse<any>> => this.http.post<any>('https://hiring-tool.ahmedsaleh.net/api/refresh_token', model);
-  
-  
   // public getAll<T>(
 
   // ): Observable<T> {

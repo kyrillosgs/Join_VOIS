@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiURL: 'https://hiring-tool.ahmedsaleh.net/',
+  apiURL: 'http://18.184.179.122/',
 };
